@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
 <!-- Added GSAP for the new heart animation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- Added SwiperJS for the new carousel -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <style>
 :where([class^="ri-"])::before { content: "\f3c2"; }
 html {
@@ -197,6 +200,65 @@ input:focus, textarea:focus, select:focus {
 .heart-cube-face.face-back   { transform: translateZ(-50%); }
 /* --- END HEART GRID ANIMATION STYLES --- */
 
+/* --- SWIPER CAROUSEL STYLES --- */
+#journeys .swiper {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+#journeys .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 340px;
+    height: 480px;
+    border-radius: 16px;
+    overflow: hidden;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, transparent, #0006);
+}
+
+.swiper-button-next, .swiper-button-prev {
+    color: #E0C56E !important; /* secondary */
+    --swiper-navigation-size: 30px;
+    background-color: rgba(49, 42, 42, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+.swiper-button-next:hover, .swiper-button-prev:hover {
+    background-color: rgba(49, 42, 42, 0.8);
+}
+.swiper-pagination-bullet-active {
+    background: #E0C56E !important; /* secondary */
+}
+
+.slide-content-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(49, 42, 42, 0.95), rgba(49, 42, 42, 0.7), transparent);
+    color: white;
+    padding: 4rem 1.5rem 1.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.slide-description {
+    opacity: 0;
+    max-height: 0;
+    transition: all 0.4s ease-in-out;
+    overflow: hidden;
+    font-size: 0.9rem;
+    color: rgba(254, 251, 246, 0.85); /* background color with alpha */
+}
+
+#journeys .swiper-slide:hover .slide-description {
+    opacity: 1;
+    max-height: 100px;
+    margin-top: 0.75rem;
+}
+
 .floating {
     animation: floating 3s ease-in-out infinite;
 }
@@ -324,24 +386,24 @@ input:focus, textarea:focus, select:focus {
              <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-accent/20 rounded-full blur-lg floating floating-delay-2"></div>
             <div class="grid grid-cols-2 gap-6">
                 <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating animate-on-scroll is-visible" style="transition-delay: 200ms;">
-                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-restaurant-2-line ri-lg text-secondary"></i></div>
-                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Gourmet Dining</h3>
-                    <p class="text-white/80 text-sm">Exclusive culinary adventures</p>
+                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-cross-line ri-lg text-secondary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Center God in Our Relationship</h3>
+                    <p class="text-white/80 text-sm">Putting God first in everything we do.</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating floating-delay-1 animate-on-scroll is-visible" style="transition-delay: 300ms;">
-                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-hotel-bed-line ri-lg text-primary"></i></div>
-                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Luxury Stays</h3>
-                    <p class="text-white/80 text-sm">Private villas & boutique hotels</p>
+                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-user-heart-line ri-lg text-primary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Love Ourselves & Our Loved Ones</h3>
+                    <p class="text-white/80 text-sm">Caring for our well-being and our families.</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating floating-delay-2 animate-on-scroll is-visible" style="transition-delay: 400ms;">
-                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-compass-3-line ri-lg text-primary"></i></div>
-                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Shared Adventures</h3>
-                    <p class="text-white/80 text-sm">Once-in-a-lifetime activities</p>
+                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-graduation-cap-line ri-lg text-primary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Graduate & Achieve Our Dreams</h3>
+                    <p class="text-white/80 text-sm">Supporting each other to reach our goals.</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating animate-on-scroll is-visible" style="transition-delay: 500ms;">
-                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-landscape-line ri-lg text-secondary"></i></div>
-                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Breathtaking Views</h3>
-                    <p class="text-white/80 text-sm">Scenery that inspires romance</p>
+                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-hand-coin-line ri-lg text-secondary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Payback & Financial Freedom</h3>
+                    <p class="text-white/80 text-sm">Working towards a future of security and giving back.</p>
                 </div>
             </div>
         </div>
@@ -464,27 +526,27 @@ input:focus, textarea:focus, select:focus {
 <section id="experiences" class="py-24 bg-white">
 <div class="container mx-auto px-6">
 <div class="text-center mb-16 animate-on-scroll">
-<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Curated Experiences for Four</h2>
-<p class="text-lg text-textPrimary max-w-2xl mx-auto">We weave together moments of adventure, relaxation, and indulgence to create the perfect shared escape.</p>
+<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Curated Surprises For You</h2>
+<p class="text-lg text-textPrimary max-w-2xl mx-auto">A collection of special gifts and activities, crafted with love, just for you.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 <div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 100ms;">
-<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-hotel-bed-line ri-2x text-primary"></i></div>
-<h3 class="text-xl font-semibold font-serif text-primary mb-3">Luxury Accommodations</h3>
-<p class="text-textPrimary mb-6">From secluded villas to charming boutique hotels, we select exquisite properties that offer privacy, comfort, and romance.</p>
-<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-coupon-3-line ri-2x text-primary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">Love Coupons</h3>
+<p class="text-textPrimary mb-6">A book of redeemable coupons for special dates, home-cooked meals, movie nights, and endless cuddles. Your wish is my command!</p>
+<a href="#" class="inline-flex items-center text-secondary font-medium">Claim Vouchers<i class="ri-arrow-right-line ml-2"></i></a>
 </div>
 <div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 200ms;">
-<div class="experience-icon w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-restaurant-2-line ri-2x text-secondary"></i></div>
-<h3 class="text-xl font-semibold font-serif text-primary mb-3">Gourmet Dining</h3>
-<p class="text-textPrimary mb-6">Indulge in private chef experiences, exclusive vineyard tours, and reservations at the most sought-after restaurants.</p>
-<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+<div class="experience-icon w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-gift-line ri-2x text-secondary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">A Special Gift</h3>
+<p class="text-textPrimary mb-6">Something special is waiting just for you. A token of my love to make your day even brighter. Are you ready to see it?</p>
+<a href="#" class="inline-flex items-center text-secondary font-medium">Unwrap Your Gift<i class="ri-arrow-right-line ml-2"></i></a>
 </div>
 <div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 300ms;">
-<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-compass-3-line ri-2x text-primary"></i></div>
-<h3 class="text-xl font-semibold font-serif text-primary mb-3">Shared Adventures</h3>
-<p class="text-textPrimary mb-6">Create lasting memories with curated activities, from sunrise hot-air balloon rides to private yacht excursions.</p>
-<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-puzzle-2-line ri-2x text-primary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">Our Love Crossword</h3>
+<p class="text-textPrimary mb-6">How well do you remember our journey? Solve this crossword puzzle filled with clues about our favorite memories and inside jokes.</p>
+<a href="#" class="inline-flex items-center text-secondary font-medium">Start The Puzzle<i class="ri-arrow-right-line ml-2"></i></a>
 </div>
 </div>
 </div>
@@ -512,89 +574,102 @@ input:focus, textarea:focus, select:focus {
 </section>
 <section id="journeys" class="py-24 bg-white">
 <div class="container mx-auto px-6">
-<div class="text-center mb-16 animate-on-scroll">
-<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Signature Romantic Journeys</h2>
-<p class="text-lg text-textPrimary max-w-2xl mx-auto">Be inspired by our collection of curated getaways, each designed to ignite romance and create beautiful shared memories.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 100ms;">
-<div class="relative overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=romantic%20villa%20in%20Tuscany%20Italy%20at%20sunset%2C%20with%20a%20couple%20in%20the%20foreground%2C%20beautiful%20landscape%20with%20vineyards&width=600&height=400&seq=proj1&orientation=landscape" alt="Tuscan Villa" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Tuscan Sunset Escape</h4><p class="text-white/80">Italy</p></div>
-</div>
-</div>
-<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">A Taste of La Dolce Vita</h3><p class="text-textPrimary mb-4">Indulge in wine tasting, private cooking classes, and stay in a breathtaking villa overlooking the rolling hills of Tuscany.</p></div>
-</div>
-<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 200ms;">
-<div class="relative overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=classic%20white%20buildings%20of%20Santorini%20Greece%20overlooking%20the%20caldera%2C%20a%20couple%20watching%20the%20sunset%20from%20a%20private%20balcony&width=600&height=400&seq=proj2&orientation=landscape" alt="Santorini Sunset" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Santorini Sea & Sky</h4><p class="text-white/80">Greece</p></div>
-</div>
-</div>
-<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">Aegean Dreams</h3><p class="text-textPrimary mb-4">Sail the caldera on a private catamaran, explore charming villages, and witness legendary sunsets from your cliffside suite.</p></div>
-</div>
-<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 300ms;">
-<div class="relative overflow-hidden">
-<img src="https://readdy.ai/api/search-image?query=beautiful%20Japanese%20garden%20in%20Kyoto%20with%20cherry%20blossoms%20in%20full%20bloom%2C%20a%20couple%20walking%20on%20a%20path&width=600&height=400&seq=proj3&orientation=landscape" alt="Kyoto Garden" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Kyoto Cherry Blossom Dream</h4><p class="text-white/80">Japan</p></div>
-</div>
-</div>
-<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">Serenity in Bloom</h3><p class="text-textPrimary mb-4">Experience the ephemeral beauty of sakura season. Visit ancient temples, participate in a tea ceremony, and stay in a traditional Ryokan.</p></div>
-</div>
-</div>
+    <div class="text-center mb-16 animate-on-scroll">
+        <h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">A Walk Down Memory Lane</h2>
+        <p class="text-lg text-textPrimary max-w-2xl mx-auto">Revisiting the special places that map out our story, one beautiful memory at a time.</p>
+    </div>
+    <!-- Swiper -->
+    <div class="swiper animate-on-scroll">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=Padre%20Garcia%20Parochial%20Catholic%20School%20facade%20Batangas%20Philippines&width=400&height=500&seq=mem1')">
+                <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">PGPC School</h3><div class="slide-description"><p>Where it all began. The hallways where we shared shy glances and the classrooms that held the start of our story.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=couple%20enjoying%20a%20samgyupsal%20meal%20in%20a%20korean%20bbq%20restaurant%20philippines&width=400&height=500&seq=mem8')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Our First Samgyup</h3><div class="slide-description"><p>Cooking meat and sharing stories. This became one of our favorite things to do together. Remember the unlimited side dishes?</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=Camplebana%20resort%20poolside%20Padre%20Garcia%20Batangas&width=400&height=500&seq=mem2')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Camplebana</h3><div class="slide-description"><p>Our fun getaways with friends and family. So many laughs, splashes, and unforgettable moments under the sun.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=modern%20Jollibee%20storefront%20in%20the%20Philippines%20at%20night&width=400&height=500&seq=mem3')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Jollibee</h3><div class="slide-description"><p>Our go-to for Chickenjoy cravings and sweet spaghetti. Simple, happy dates that always hit the spot.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=modern%20McDonalds%20storefront%20in%20the%20Philippines%20at%20night&width=400&height=500&seq=mem4')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">McDonald's</h3><div class="slide-description"><p>For late-night talks over fries and coke floats. Our little corner of the world, no matter the time.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=cozy%20filipino%20lomi%20restaurant%20interior%20with%20warm%20lighting&width=400&height=500&seq=mem5')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Louie & Chit's</h3><div class="slide-description"><p>The best lomi in town! Our comfort food spot for rainy days or whenever we needed a warm, soupy hug.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=KFC%20restaurant%20exterior%20in%20the%20Philippines&width=400&height=500&seq=mem6')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">KFC</h3><div class="slide-description"><p>Because sometimes, you just need that original recipe chicken. Our other "secret" fast food affair.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=serene%20lakeside%20cafe%20in%20the%20Philippines%20at%20sunset&width=400&height=500&seq=mem7')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Lagoon Cafe</h3><div class="slide-description"><p>Quiet afternoons and conversations with a view. A peaceful escape where we could just be with each other.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=CityMall%20facade%20in%20a%20Philippine%20province&width=400&height=500&seq=mem9')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">City Mall</h3><div class="slide-description"><p>Window shopping, movie dates, and just walking around holding hands. Our little mall adventures.</p></div></div>
+            </div>
+            <div class="swiper-slide" style="background-image:url('https://readdy.ai/api/search-image?query=aisles%20of%20SM%20Hypermart%20in%20the%20Philippines&width=400&height=500&seq=mem10')">
+                 <div class="slide-content-wrapper"><h3 class="text-2xl font-serif font-semibold">Hypermart</h3><div class="slide-description"><p>Even a simple grocery run feels like a special date when I'm with you. Picking out snacks and planning our meals.</p></div></div>
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
 </div>
 </section>
 <section id="testimonials" class="py-24 bg-accent/30">
-<div class="container mx-auto px-6">
-<div class="text-center mb-16 animate-on-scroll">
-<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Love notes for us</h2>
-<p class="text-lg text-textPrimary max-w-2xl mx-auto">Hear my every thought and feelings about you</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 100ms;">
-<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
-<p class="text-textPrimary mb-6 italic">"Evermore Journeys planned the most magical and seamless trip to the Amalfi Coast for us and our best friends. Every detail was perfect, allowing us to simply relax and enjoy each other's company. Unforgettable!"</p>
-<div class="flex items-center"><div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4"><span class="text-primary font-semibold font-serif text-lg">O&L</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Olivia & Liam</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
-</div>
-<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 200ms;">
-<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
-<p class="text-textPrimary mb-6 italic">"Traveling with another couple can be tricky to plan, but our planner made it effortless. The mix of shared activities and private time was perfect. We rekindled our romance and deepened our friendship. Thank you!"</p>
-<div class="flex items-center"><div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mr-4"><span class="text-secondary font-semibold font-serif text-lg">C&N</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Chloe & Noah</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
-</div>
-<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 300ms;">
-<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
-<p class="text-textPrimary mb-6 italic">"The personalized touches set our trip apart. From a surprise champagne toast at sunset to a handwritten note at our villa, we felt so cared for. It was more than a vacation; it was an experience we will cherish forever."</p>
-<div class="flex items-center"><div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4"><span class="text-primary font-semibold font-serif text-lg">A&E</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Ava & Ethan</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
-</div>
-</div>
-</div>
-</section>
-<section class="py-24 bg-primary relative overflow-hidden">
-<div class="absolute top-0 right-0 w-1/2 h-full opacity-10" style="background-image: url('https://readdy.ai/api/search-image?query=abstract%20soft%20bokeh%20lights%2C%20gold%20and%20red%20tones%2C%20romantic%20background&width=800&height=800&seq=cta1&orientation=squarish'); background-size: cover;"></div>
-<div class="container mx-auto px-6 relative z-10 animate-on-scroll">
-<div class="max-w-3xl mx-auto text-center">
-<h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-6">Ready to Create Your Forever Story?</h2>
-<p class="text-lg text-white/80 mb-8">Let us design a unique getaway for you and your favorite couple. A journey of romance, friendship, and discovery awaits.</p>
-<div class="flex flex-col sm:flex-row gap-4 justify-center">
-<a href="#contact" class="bg-secondary text-primary px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap">Design Your Dream Trip</a>
-<a href="#journeys" class="bg-transparent border-2 border-white text-white px-8 py-3 !rounded-button font-medium hover:bg-white/10 transition-all whitespace-nowrap">See Our Packages</a>
-</div>
-</div>
-</div>
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-on-scroll">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">A Foundation of Faith</h2>
+            <p class="text-lg text-textPrimary max-w-2xl mx-auto">Guiding verses for our journey together, rooted in love and His word.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Verse 1 -->
+            <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll flex flex-col h-full" style="transition-delay: 100ms;">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 self-center flex-shrink-0">
+                    <i class="ri-group-2-line ri-2x text-primary"></i>
+                </div>
+                <p class="text-textPrimary mb-6 italic text-center flex-grow">"Two are better than one, because they have a good return for their labor: If either of them falls down, one can help the other up. But pity anyone who falls and has no one to help them up."</p>
+                <div class="text-center mt-auto pt-4 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold font-serif text-primary">Ecclesiastes 4:9-10</h4>
+                </div>
+            </div>
+            <!-- Verse 2 -->
+            <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll flex flex-col h-full" style="transition-delay: 200ms;">
+                <div class="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mb-6 self-center flex-shrink-0">
+                    <i class="ri-heart-3-line ri-2x text-secondary"></i>
+                </div>
+                <p class="text-textPrimary mb-6 italic text-center flex-grow">"Love is patient, love is kind. It does not envy, it does not boast, it is not proud... It always protects, always trusts, always hopes, always perseveres. Love never fails."</p>
+                <div class="text-center mt-auto pt-4 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold font-serif text-primary">1 Corinthians 13:4-8</h4>
+                </div>
+            </div>
+            <!-- Verse 3 -->
+            <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll flex flex-col h-full" style="transition-delay: 300ms;">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 self-center flex-shrink-0">
+                    <i class="ri-links-line ri-2x text-primary"></i>
+                </div>
+                <p class="text-textPrimary mb-6 italic text-center flex-grow">"And over all these virtues put on love, which binds them all together in perfect unity."</p>
+                <div class="text-center mt-auto pt-4 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold font-serif text-primary">Colossians 3:14</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <section id="contact" class="py-24 bg-white overflow-x-hidden">
 <div class="container mx-auto px-6">
 <div class="flex flex-col lg:flex-row gap-12">
 <div class="lg:w-1/2 animate-on-scroll">
-<h2 class="text-3xl md:text-4xl font-serif font-bold text-primary mb-6">Begin Your Journey</h2>
-<p class="text-textPrimary mb-8">Have questions, or are you ready to start planning? Contact our romance planners for a complimentary consultation. We're excited to help you craft the perfect double-couples' escape.</p>
+<h2 class="text-3xl md:text-4xl font-serif font-bold text-primary mb-6">What is it? my love😊</h2>
+<p class="text-textPrimary mb-8">Have questions, or are you ready to start planning? Contact me for a romance planners you thought.</p>
 <form class="space-y-6">
 <div><label for="name" class="block text-sm font-medium text-textPrimary mb-2">Your Full Name</label><input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="Melinda Dacallos"></div>
 <div><label for="email" class="block text-sm font-medium text-textPrimary mb-2">Email Address</label><input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="melinda@example.com"></div>
-<div><label for="message" class="block text-sm font-medium text-textPrimary mb-2">Tell Us About Your Dream Trip</label><textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="We're dreaming of a coastal escape with great food and relaxation..."></textarea></div>
+<div><label for="message" class="block text-sm font-medium text-textPrimary mb-2">Tell Me About Your Dream Trip Or Questions</label><textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="you're dreaming with great food and relaxation..."></textarea></div>
 <button type="submit" class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap w-full md:w-auto">Send Inquiry</button>
 </form>
 </div>
@@ -1015,6 +1090,32 @@ document.addEventListener('DOMContentLoaded', () => {
              // Use a timeout to avoid spamming the function during resize
              clearTimeout(window.resizeTimer);
              window.resizeTimer = setTimeout(generateGrid, 250);
+        });
+    }
+
+    // --- Journeys Carousel (Swiper.js) ---
+    if (document.getElementById('journeys')) {
+        const swiper = new Swiper('#journeys .swiper', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loop: true,
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
         });
     }
 });
