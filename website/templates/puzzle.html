@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory For You - Responsive</title>
+    <style>
+        /* --- FONTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Mali:wght@400;600&family=Pacifico&family=Caveat:wght@500&display=swap');
+
+        /* --- BASIC SETUP --- */
+        :root {
+            --bg-color: #fff0f5; /* Lavender Blush */
+            --card-bg: #ffffff;
+            --main-text-color: #d94c65;
+            --sub-text-color: #f2a2b2;
+            --border-color: #f7ced7;
+            --shadow-color: rgba(217, 76, 101, 0.1);
+            --letter-bg: #fffaf0; /* Floral White */
+            --letter-text: #4a4a4a;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px; /* Base font size for rem units */
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Mali', cursive;
+            background-color: var(--bg-color);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'%3E%3Cpath d='M50 85 C-20 40, 20 10, 50 40 C80 10, 120 40, 50 85' fill='%23f9e4e9'/%3E%3C/svg%3E");
+            background-size: 80px 80px;
+            padding: 10px;
+        }
+
+        /* --- GAME CONTAINER --- */
+        .game-container {
+            width: 95%; /* Use percentage for fluidity */
+            max-width: 480px; /* Stop it from getting too big on desktop */
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-text {
+            font-size: 1.2rem;
+            color: var(--sub-text-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .game-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.8rem;
+            color: var(--main-text-color);
+            margin-bottom: 5px;
+        }
+        
+        .game-subtitle {
+            font-size: 0.9rem;
+            color: var(--sub-text-color);
+            margin-bottom: 20px;
+        }
+
+        /* --- MEMORY GAME GRID --- */
+        .memory-game {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 10px;
+            perspective: 1000px;
+        }
+        
+        /* --- CARD STYLING --- */
+        .memory-card {
+            background-color: transparent;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .memory-card.flip {
+            transform: rotateY(180deg);
+        }
+        
+        .front-face, .back-face {
+            width: 100%;
+            height: 100%;
+            padding: 15%;
+            position: absolute;
+            backface-visibility: hidden;
+            background-color: var(--card-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .front-face { transform: rotateY(180deg); }
+        .front-face img, .back-face img { width: 100%; height: 100%; object-fit: contain; }
+
+        .watermark {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ccc;
+            font-size: 1rem;
+            font-family: sans-serif;
+            opacity: 0.7;
+        }
+        
+        /* --- WIN MESSAGE (LETTER) --- */
+        .win-message {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            padding: 15px;
+        }
+
+        .win-message.show { opacity: 1; pointer-events: auto; }
+        
+        .letter {
+            background: var(--letter-bg);
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.3);
+            max-width: 550px;
+            width: 100%;
+            font-family: 'Caveat', cursive;
+            color: var(--letter-text);
+            text-align: left;
+            transform: scale(0.8);
+            transition: transform 0.4s ease-out 0.2s;
+        }
+
+        .win-message.show .letter { transform: scale(1); }
+        .letter .salutation { font-size: 2rem; margin-bottom: 20px; }
+        .letter .letter-body { font-size: 1.6rem; line-height: 1.7; margin-bottom: 30px; }
+        .letter .closing { font-size: 1.7rem; text-align: right; }
+        .letter .signature { font-family: 'Pacifico', cursive; font-size: 2rem; text-align: right; color: var(--main-text-color); }
+        
+        #play-again {
+            font-family: 'Mali', cursive;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 25px;
+            margin-top: 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            background-color: var(--main-text-color);
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 10px rgba(217, 76, 101, 0.4);
+        }
+        #play-again:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(217, 76, 101, 0.5); }
+
+        /* --- UI ELEMENTS (NEW) --- */
+        #home-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            z-index: 101; /* Above the win message overlay */
+            text-decoration: none;
+            color: var(--main-text-color); /* This will be inherited by the SVG's stroke */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        #home-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(217, 76, 101, 0.3);
+        }
+
+        #home-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        /* For tablets and smaller devices */
+        @media (max-width: 768px) {
+            .header-text { font-size: 1rem; }
+            .game-title { font-size: 2.5rem; }
+            .game-subtitle { font-size: 0.8rem; }
+        }
+
+        /* For mobile phones */
+        @media (max-width: 480px) {
+            .game-title { font-size: 2.2rem; }
+            .memory-game { gap: 8px; }
+            
+            /* Adjust letter for small screens */
+            .letter {
+                padding: 25px 20px;
+            }
+            .letter .salutation { font-size: 1.8rem; }
+            .letter .letter-body { font-size: 1.3rem; line-height: 1.6; }
+            .letter .closing { font-size: 1.4rem; }
+            .letter .signature { font-size: 1.8rem; }
+            #play-again { font-size: 0.9rem; padding: 10px 20px; }
+
+            /* Adjust home button for small screens */
+            #home-button {
+                width: 45px;
+                height: 45px;
+                bottom: 15px;
+                right: 15px;
+            }
+            #home-button svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1 class="header-text">Our memories my beloved girlfriend!💖</h1>
+        <h2 class="game-title">Memory For You</h2>
+        <p class="game-subtitle">
+Match the pictures to find our good memories.</p>
+        <section class="memory-game"></section>
+        <div class="watermark">season.snap</div>
+    </div>
+    
+    <div class="win-message" id="winMessage">
+        <div class="letter">
+            <p class="salutation">To my dearest,</p>
+            <p class="letter-body">
+                Congratulations on finding all our memories! Each one is a beautiful reminder of the wonderful journey we're on together. Here's to many more adventures and moments to cherish.
+            </p>
+            <p class="closing">With all my love,</p>
+            <p class="signature">Your forever</p>
+            <button id="play-again">Relive our memories</button>
+        </div>
+    </div>
+
+    <!-- HOME BUTTON (NEW) -->
+    <a href="{{ url_for('views.home') }}" id="home-button" title="Go Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    </a>
+
+    <script>
+        const cardData = [
+            { name: 'gift', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLWdpZnQiPjxwb2x5bGluZSBwb2ludHM9IjIwIDEyIDEyIDIwIDQgMTIgMTIgNCI+PC9wb2x5bGluZT48bGluZSB4MT0iMTIiIHkxPSIxIiB4Mj0iMTIiIHkyPSIyMyI+PC9saW5lPjxwYXRoIGQ9Ik0xMiAxTDAgMTEgMTIgMjMgMjQgMTEgMTIgMXoiIHRyYW5zZm9ybT0icm90YXRlKDkwIDEyIDEyKSIgLz48L3N2Zz4=` },
+            { name: 'heart', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLWhlYXJ0Ij48cGF0aCBkPSJNMjAuODQgNC42MWExLjIzIDEuMjMgMCAwIDAtMS4yMi0uMDFsLS4wMy4wM0wxMiAxMi4yNyA2LjM5IDYuNTRhNS41IDUuNSAwIDAgMC03Ljc4IDBMMyA2LjYxaC4wMWExLjIzIDEuMjMgMCAwIDAtLjAyIDEuMjNsLjAzLjA0IDcuNCA3Ljc4IDIuODcgMi44Ny4wMy4wM2ExIDEgMCAwIDAgMS40MSAwTDIwLjg0IDYuMzRhNS41IDUuNSAwIDAgMCAwLTcuNzdsLS4wMS0uMDJaIj48L3BhdGg+PC9zdmc+` },
+            { name: 'camera', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLWNhbWVyYSI+PHBhdGggZD0iTTIzIDE5YTQgNCAwIDAgMS00IDRIMWE0IDQgMCAwIDEtNC00VjhhNCA0IDAgMCAxIDQtNEg3bDIgM2gzbDItM2g2YTQgNCAwIDAgMSA0IDR6Ij48L3BhdGg+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+` },
+            { name: 'cake', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLWdpZnQiPjxwYXRoIGQ9Ik0xMiAyMHYtOCBNMTIgMmE0IDQgMCAxIDAgMCA4IDQgNCAwIDAgMCAwLThtMCA4aDhhNCA0IDAgMSAwIDAtOGgtOGE0IDQgMCAxIDEtOCAwaDhhNCA0IDAgMSAxIDAgOHoiLz48cGF0aCBkPSJNMjAgMTJ2OGExIDcgMCAwIDEtMTggMCAxIDcgMCAwIDEgMTggMFoiLz48cGF0aCBkPSJNMTEgN2gxIi8+PC9zdmc+` },
+            { name: 'music', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLW11c2ljIj48cGF0aCBkPSJNOSAxOHYtN2E0IDQgMCAxIDEgOCAwdiI+PC9wYXRoPjxjaXJjbGUgY3g9IjYiIGN5PSIxOCIgcj0iMyI+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMTgiIGN5PSIxNiIgcj0iMyI+PC9jaXJjbGU+PC9zdmc+` },
+            { name: 'star', img: `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNkOTRjNjUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0iZmVhdGhlciBmZWF0aGVyLXN0YXIiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAxNS4wOSAyMi41OSAyIDEyIDIyIDIyIDE1IDkuOTEgNy45MSAyMi4wOSAxOS41IDEyIDIgMiAyIDEyIj48L3BvbHlnb24+PC9zdmc+` }
+        ];
+        const questionMarkImg = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmN2NlZDciIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItaGVscC1jaXJjbGUiPjxwYXRoIGQ9Ik05LjA5IDlhMyAzIDAgMCAxIDUuODMgMWMyIDEuMjEgMS4wOSA0LjQxLTIuMDggNi4zMW0uMDkgNC4zN2gtLjA4Ij48L3BhdGg+PC9zdmc+`;
+
+        const gameBoard = document.querySelector('.memory-game');
+        const winMessageElement = document.getElementById('winMessage');
+        const playAgainButton = document.getElementById('play-again');
+
+        let hasFlippedCard = false, lockBoard = false;
+        let firstCard, secondCard;
+        let matchedPairs = 0;
+
+        function createBoard() {
+            gameBoard.innerHTML = '';
+            matchedPairs = 0;
+            const gameCards = [...cardData, ...cardData];
+            gameCards.sort(() => 0.5 - Math.random());
+
+            gameCards.forEach(cardInfo => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.name = cardInfo.name;
+                card.innerHTML = `
+                    <img class="front-face" src="${cardInfo.img}" alt="${cardInfo.name}">
+                    <img class="back-face" src="${questionMarkImg}" alt="Question Mark">
+                `;
+                card.addEventListener('click', flipCard);
+                gameBoard.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard || this === firstCard) return;
+            this.classList.add('flip');
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            firstCard.dataset.name === secondCard.dataset.name ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+            matchedPairs++;
+            checkWinCondition();
+            resetBoard();
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flip');
+                secondCard.classList.remove('flip');
+                resetBoard();
+            }, 1000);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+        
+        function checkWinCondition() {
+            if (matchedPairs === cardData.length) {
+                setTimeout(() => winMessageElement.classList.add('show'), 700);
+            }
+        }
+
+        playAgainButton.addEventListener('click', () => {
+            winMessageElement.classList.remove('show');
+            setTimeout(() => {
+                const allCards = document.querySelectorAll('.memory-card');
+                allCards.forEach(card => card.classList.remove('flip'));
+                createBoard();
+            }, 500); 
+        });
+
+        createBoard();
+    </script>
+</body>
+</html>

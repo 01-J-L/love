@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Our World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #fde7f0; --primary-color: #e91e63; --secondary-color: #f8bbd0; --white-color: #ffffff; --error-color: #f44336; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* --- MODIFICATION 1: Make Body Scrollable --- */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+            /* Removed `align-items: center` and `overflow: hidden` to allow natural scrolling */
+            padding: 40px 20px; /* Add padding for spacing, especially on mobile */
+        }
+
+        .lock-container { text-align: center; padding: 20px; max-width: 350px; width: 100%; }
+        .lock-icon-wrapper { width: 70px; height: 70px; background-color: var(--primary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        .lock-icon { width: 35px; height: 35px; color: var(--white-color); }
+        h1 { font-family: 'Pacifico', cursive; color: var(--primary-color); font-size: 2.2rem; margin-bottom: 10px; font-weight: 400; }
+        .hint { color: var(--primary-color); opacity: 0.8; margin-bottom: 25px; font-size: 0.9rem; }
+        
+        #password-display {
+            width: 90%;
+            height: 70px;
+            padding: 15px;
+            margin: 0 auto 25px;
+            background-color: var(--white-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2.5rem;
+            letter-spacing: 0.2em;
+            color: var(--primary-color);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1;
+        }
+
+        #password-display.shake { animation: shake 0.5s ease-in-out; }
+
+        #keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 280px;
+            margin: 0 auto 25px;
+        }
+
+        .key {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .key:hover { background-color: var(--secondary-color); }
+        .key:active { transform: scale(0.95); background-color: var(--primary-color); color: var(--white-color); border-color: var(--primary-color); }
+        #keypad .key[data-key="x"] { font-size: 2.2rem; }
+
+        #unlock-btn { 
+            width: 100%; max-width: 280px; 
+            padding: 15px; 
+            border: none; 
+            background-color: var(--primary-color); 
+            color: var(--white-color); 
+            font-size: 1.2rem; 
+            font-weight: 500; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: background-color 0.2s;
+        }
+        #unlock-btn:hover { background-color: #d81b60; }
+        
+        .error-msg { color: var(--error-color); height: 20px; margin-top: 10px; font-weight: 500; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }
+        
+        #hearts-container { position: fixed; /* Use fixed to keep it behind content even when scrolling */ top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        .heart { position: absolute; bottom: -50px; color: var(--primary-color); animation: floatUp 5s linear forwards; opacity: 0.6; }
+        @keyframes floatUp { to { transform: translateY(-110vh) scale(0.7); opacity: 0; } }
+
+        /* --- MODIFICATION 2: Add Media Query for Mobile Responsiveness --- */
+        @media (max-width: 375px) {
+            body {
+                padding: 20px 10px; /* Less padding on smaller screens */
+            }
+            h1 {
+                font-size: 1.9rem; /* Slightly smaller title */
+            }
+            .lock-icon-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+            .lock-icon {
+                width: 30px;
+                height: 30px;
+            }
+            #password-display {
+                height: 60px;
+                font-size: 2rem;
+            }
+            #keypad {
+                gap: 10px;
+                max-width: 220px; /* Reduce max-width to fit smaller keys */
+            }
+            .key {
+                width: 60px; /* Smaller keys */
+                height: 60px;
+                font-size: 1.6rem;
+            }
+            #unlock-btn {
+                max-width: 220px; /* Match the new keypad width */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="hearts-container"></div>
+    <form class="lock-container" method="POST" action="{{ url_for('views.lock_screen') }}">
+        <!-- ... (rest of the body is unchanged) ... -->
+        <div class="lock-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="lock-icon"><path d="M12 1.5a4.5 4.5 0 0 0-4.5 4.5v3h9v-3a4.5 4.5 0 0 0-4.5-4.5Zm-2.5 4.5a2.5 2.5 0 0 1 5 0v3h-5v-3Z"/><path d="M4 10.5a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3v-7a3 3 0 0 0-3-3H4Zm16 1.5a1.5 1.5 0 0 1 1.5 1.5v7a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 19v-7a1.5 1.5 0 0 1 1.5-1.5h16Z"/></svg></div>
+        <h1>Enter Secret Code</h1>
+        <p class="hint">Hint: Our special date (MMDDYYYY)</p>
+        
+        <div id="password-display" class="{% if error %}shake{% endif %}"></div>
+        
+        <input type="hidden" name="password" id="password-input" maxlength="8">
+
+        <div id="keypad">
+            <button type="button" class="key" data-key="1">1</button>
+            <button type="button" class="key" data-key="2">2</button>
+            <button type="button" class="key" data-key="3">3</button>
+            <button type="button" class="key" data-key="4">4</button>
+            <button type="button" class="key" data-key="5">5</button>
+            <button type="button" class="key" data-key="6">6</button>
+            <button type="button" class="key" data-key="7">7</button>
+            <button type="button" class="key" data-key="8">8</button>
+            <button type="button" class="key" data-key="9">9</button>
+            <div></div> 
+            <button type="button" class="key" data-key="0">0</button>
+            <button type="button" class="key" data-key="x">×</button>
+        </div>
+        
+        <button type="submit" id="unlock-btn">Unlock</button>
+
+        {% if error %}
+            <p class="error-msg">{{ error }}</p>
+        {% endif %}
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                document.getElementById('hearts-container').appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 7000);
+            }
+            setInterval(createHeart, 300);
+
+            const display = document.getElementById('password-display');
+            const hiddenInput = document.getElementById('password-input');
+            const keypad = document.getElementById('keypad');
+            const maxLength = 8;
+
+            function updateDisplay() {
+                const dots = '•'.repeat(hiddenInput.value.length);
+                const placeholders = '·'.repeat(maxLength - hiddenInput.value.length);
+                display.textContent = dots + placeholders;
+            }
+
+            keypad.addEventListener('click', (e) => {
+                if (e.target.matches('.key')) {
+                    const key = e.target.dataset.key;
+                    
+                    if (key === 'x') {
+                        hiddenInput.value = hiddenInput.value.slice(0, -1);
+                    } else if (hiddenInput.value.length < maxLength) {
+                        hiddenInput.value += key;
+                    }
+                    updateDisplay();
+                }
+            });
+
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>

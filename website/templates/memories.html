@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Website for My Sweetheart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Kalam:wght@300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Basic Setup & Fonts --- */
+        :root {
+            --bg-color: #fdfaf4;
+            --grid-color: #e9e3d7;
+            --text-color: #5c544b;
+            --heading-color: #d17c8c;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --border-color: #eee;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Kalam', cursive;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px), 
+                linear-gradient(to right, var(--grid-color) 1px, var(--bg-color) 1px);
+            background-size: 25px 25px;
+        }
+
+        .script-font { font-family: 'Dancing Script', cursive; }
+        .serif-font { font-family: 'Playfair Display', serif; }
+
+        /* --- Main Page Container --- */
+        .page-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background-color: white;
+            box-shadow: 0 5px 25px var(--shadow-color);
+            border-radius: 5px;
+            padding: 2rem 3rem;
+        }
+
+        /* --- Always-Visible Header & Nav --- */
+        header {
+            text-align: center;
+            padding-bottom: 2rem;
+            border-bottom: 2px dotted var(--border-color);
+        }
+        header h1 {
+            font-size: 4rem;
+            color: var(--heading-color);
+            margin: 0;
+        }
+        header .subtitle {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            color: #a0988f;
+        }
+        header .amour {
+            font-size: 3rem;
+            margin-top: 1.5rem;
+        }
+        header .from-name {
+            display: block;
+            margin-top: -1rem;
+            font-size: 1.5rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 2px dotted var(--border-color);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover, nav a.active {
+            background-color: #fdebee;
+            color: var(--heading-color);
+        }
+        
+        /* --- Page Switching Logic --- */
+        .page {
+            display: none; /* Hide all pages by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .page.active {
+            display: block; /* Show the active page */
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-to-menu-btn {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--heading-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .back-to-menu-btn:before {
+            content: '← ';
+        }
+
+        /* --- Section Styling (shared) --- */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #8c7d6e;
+            margin-bottom: 2.5rem;
+        }
+        
+        /* --- Home/Initial Photo Display --- */
+        .photo-strip {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .photo-strip img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border: 8px solid white;
+            box-shadow: 3px 3px 10px var(--shadow-color);
+            transition: transform 0.3s;
+        }
+        .photo-strip img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* --- Calendar Section --- */
+        #page-calendar .collage {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .collage-item {
+            background-color: white;
+            padding: 10px;
+            box-shadow: 3px 3px 10px var(--shadow-color);
+            border-radius: 4px;
+        }
+        .collage-item img {
+            width: 100%;
+            display: block;
+        }
+        .collage-item.text-note {
+            padding: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            background-color: #fff9e8;
+        }
+        .collage-item:nth-child(1) { transform: rotate(-3deg); }
+        .collage-item:nth-child(3) { transform: rotate(4deg); }
+        .collage-item:nth-child(4) { transform: rotate(-2deg); }
+
+        /* --- Noted to You Section --- */
+        #page-noted-to-you .letter-content {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .letter-text {
+            flex: 2;
+            min-width: 300px;
+        }
+        .letter-quote {
+            flex: 1;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--heading-color);
+            text-align: center;
+            border-left: 3px solid #fdebee;
+            padding-left: 1.5rem;
+        }
+        .letter-text p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* --- Memories Grid Section --- */
+        #page-memories .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .photo-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 8px solid white;
+            box-shadow: 3px 3px 10px var(--shadow-color);
+            transition: transform 0.3s;
+        }
+        .photo-grid img:hover {
+            transform: scale(1.03);
+            z-index: 10;
+        }
+        
+        /* --- Fav Message Section --- */
+        #page-fav-message .message-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .message-grid img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 3px 3px 10px var(--shadow-color);
+        }
+
+        /* --- Blog-style Memories Section --- */
+        #page-our-memories .memory-articles {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .article-card {
+            text-align: center;
+        }
+        .article-card img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            box-shadow: 3px 3px 10px var(--shadow-color);
+        }
+        .article-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--heading-color);
+            margin: 0 0 0.5rem 0;
+        }
+        .article-card a {
+            color: #bca997;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .full-article {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 2px dotted var(--border-color);
+        }
+        .full-article h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            color: var(--heading-color);
+        }
+        .full-article-content {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .full-article-content .ticket-stubs {
+            flex-basis: 30%;
+        }
+        .full-article-content .article-text {
+            flex-basis: 70%;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .ticket-stubs img {
+            width: 100%;
+            margin-bottom: 1rem;
+            filter: drop-shadow(2px 2px 5px var(--shadow-color));
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            header h1 { font-size: 3rem; }
+            .photo-strip img { width: 120px; height: 120px; }
+            .letter-quote { border: none; border-top: 3px solid #fdebee; padding: 1.5rem 0 0 0; }
+            #page-our-memories .memory-articles { grid-template-columns: 1fr; }
+            .full-article-content { flex-direction: column; }
+        }
+
+        /* --- Fixed Home Button --- */
+        .home-button-fixed {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background-color: var(--heading-color);
+            color: white;
+            border-radius: 50%; /* Makes it a circle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem; /* Size of the home icon */
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .home-button-fixed:hover {
+            transform: scale(1.1);
+            background-color: #e08c9c; /* A slightly lighter shade of the heading color */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        <header>
+            <h1 class="script-font">Happy Valentine's, my wiss</h1>
+            <p class="subtitle serif-font">hope today gives you a reason to smile!</p>
+            <h2 class="script-font amour">Amour
+                <span class="from-name">by your dd</span>
+            </h2>
+        </header>
+
+        <nav>
+            <a data-page="page-home">Main</a>
+            <a data-page="page-calendar">Calendar</a>
+            <a data-page="page-noted-to-you">Noted to You</a>
+            <a data-page="page-memories">Memories</a>
+            <a data-page="page-fav-message">Fav Message</a>
+            <a data-page="page-our-memories">Our Memories</a>
+        </nav>
+
+        <main>
+            <!-- Home Page Content -->
+            <section id="page-home" class="page">
+                <div class="photo-strip">
+                    <img src="https://readdy.ai/api/search-image?query=red%20theater%20curtain%20opening%20to%20a%20glowing%20heart&width=300&height=300&seq=vday1" alt="Heart Curtain">
+                    <img src="https://readdy.ai/api/search-image?query=vintage%20be%20my%20valentine%20card%20with%20cherubs&width=300&height=300&seq=vday2" alt="Be My Valentine Card">
+                    <img src="https://readdy.ai/api/search-image?query=cute%20couple%20posing%20in%20a%20photobooth%2C%20vintage%20style&width=300&height=300&seq=vday3" alt="Couple Photobooth">
+                    <img src="https://readdy.ai/api/search-image?query=box%20of%20ferrero%20rocher%20chocolates%20and%20roses&width=300&height=300&seq=vday4" alt="Chocolates">
+                </div>
+                 <p class="serif-font" style="text-align:center; margin-top: 3rem; font-size: 1.2rem; color: #a0988f;">Click a link above to explore our story...</p>
+            </section>
+            
+            <!-- Calendar Page Content -->
+            <section id="page-calendar" class="page">
+                <a class="back-to-menu-btn">Back to Menu</a>
+                <h2 class="section-title">A Calendar of Us</h2>
+                <div class="collage">
+                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=colorful%20inspirational%20sticker%20saying%20What%20If%20It%20All%20Works%20Out%3F&width=400&height=400&seq=cal1" alt="Sticker quote"></div>
+                    <div class="collage-item text-note serif-font">
+                        This calendar has 14 months, and it is our record of sharing good things together. Be sure to check and check out each month! Xoxo
+                    </div>
+                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=vintage%20style%20poster%20for%20Valentines%20day&width=400&height=600&seq=cal2" alt="Valentines Poster"></div>
+                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=two%20of%20hearts%20playing%20card%2C%20vintage%20style&width=400&height=500&seq=cal3" alt="Playing Card"></div>
+                </div>
+            </section>
+            
+            <!-- Noted to You Page Content -->
+            <section id="page-noted-to-you" class="page">
+                <a class="back-to-menu-btn">Back to Menu</a>
+                <h2 class="section-title">Noted to You</h2>
+                <div class="photo-strip">
+                     <img src="https://readdy.ai/api/search-image?query=man%27s%20hands%20forming%20a%20heart%20shape%2C%20warm%20lighting&width=400&height=400&seq=note1" alt="Hands forming a heart">
+                     <img src="https://readdy.ai/api/search-image?query=two%20people%27s%20hands%20coming%20together%20to%20form%20a%20heart%20shape&width=400&height=400&seq=note2" alt="Two hands heart">
+                     <img src="https://readdy.ai/api/search-image?query=man%20winking%20and%20smiling%20at%20the%20camera&width=400&height=400&seq=note3" alt="Man smiling">
+                </div>
+                <div class="letter-content" style="margin-top: 3rem;">
+                    <div class="letter-quote">"This is the sweetest letter you've ever read"</div>
+                    <div class="letter-text serif-font">
+                        <p>Happy Valentine's Day, my Wiss. Even though we don't say "I love you," we show it in a thousand different ways. My heart does a little flip every time when I think about it, over the past 1 year and 2 months... It feels like a dream. Our journey hasn't been easy, we've been through both good and bad-looking times, and we've celebrated so many firsts that sometimes it's hard to keep track of it all. We've reminded each other to live in the present, but let's be honest, those memories are too precious to forget. I'm saving the letters we'll write to each other so we can look back on them when we're older. Thank you for your endless support, even when I'm a mess. This Valentine's Day is another special one for me because I have you. Future, this Valentine's Day is for you.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memories Grid Page Content -->
+            <section id="page-memories" class="page">
+                <a class="back-to-menu-btn">Back to Menu</a>
+                <h2 class="section-title">The memories we made together, if I hadn't kept the photos,<br>we probably wouldn't remember them</h2>
+                <div class="photo-grid">
+                    <img src="https://readdy.ai/api/search-image?query=casual%20photo%20of%20a%20young%20couple%20laughing%20on%20a%20sofa&width=300&height=200&seq=mem1" alt="Memory 1">
+                    <img src="https://readdy.ai/api/search-image?query=selfie%20of%20a%20man%20smiling%2C%20playful%20expression&width=300&height=200&seq=mem2" alt="Memory 2">
+                    <img src="https://readdy.ai/api/search-image?query=couple%20taking%20a%20mirror%20selfie%20together&width=300&height=200&seq=mem3" alt="Memory 3">
+                    <img src="https://readdy.ai/api/search-image?query=photo%20of%20a%20woman%20smiling%20brightly&width=300&height=200&seq=mem4" alt="Memory 4">
+                    <img src="https://readdy.ai/api/search-image?query=couple%20cuddling%20on%20a%20bed%2C%20cozy%20and%20intimate&width=300&height=200&seq=mem5" alt="Memory 5">
+                    <img src="https://readdy.ai/api/search-image?query=young%20man%20looking%20thoughtful&width=300&height=200&seq=mem6" alt="Memory 6">
+                    <img src="https://readdy.ai/api/search-image?query=woman%20laughing%20with%20eyes%20closed&width=300&height=200&seq=mem7" alt="Memory 7">
+                    <img src="https://readdy.ai/api/search-image?query=couple%20making%20silly%20faces%20at%20the%20camera&width=300&height=200&seq=mem8" alt="Memory 8">
+                </div>
+            </section>
+            
+            <!-- Fav Message Page Content -->
+            <section id="page-fav-message" class="page">
+                <a class="back-to-menu-btn">Back to Menu</a>
+                <h2 class="section-title">This is the message I've chosen because it's my favorite,<br>and there were quite a few to choose from!</h2>
+                <div class="message-grid">
+                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20romantic%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg1" alt="Favorite Message 1">
+                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20loving%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg2" alt="Favorite Message 2">
+                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20sweet%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg3" alt="Favorite Message 3">
+                </div>
+            </section>
+            
+            <!-- Our Memories (Blog) Page Content -->
+            <section id="page-our-memories" class="page">
+                <a class="back-to-menu-btn">Back to Menu</a>
+                <h2 class="section-title">Our Memories<br><small style="font-size: 1.2rem; color: #a0988f;">The memories that are important to me, the ones we created together :)</small></h2>
+                <div class="memory-articles">
+                    <div class="article-card">
+                        <img src="https://readdy.ai/api/search-image?query=bouquet%20of%20lego%20flowers%20in%20a%20dark%20room&width=400&height=500&seq=blog1" alt="Valentine's day gift">
+                        <h3>Valentine's Day 202x !!</h3>
+                    </div>
+                    <div class="article-card">
+                        <img src="https://readdy.ai/api/search-image?query=beautiful%20homemade%20birthday%20cake%20with%20berries%20on%20top&width=400&height=500&seq=blog2" alt="Birthday Cake">
+                        <h3>Wissel's birthday</h3>
+                    </div>
+                </div>
+
+                <div class="full-article">
+                    <h2 class="script-font">Happy Valentine's Day</h2>
+                    <div class="full-article-content">
+                        <div class="ticket-stubs">
+                           <img src="https://readdy.ai/api/search-image?query=pink%20and%20red%20ticket%20stub%20with%20text%20'LOVE%20WISSEL%20DAY'&width=500&height=200&seq=ticket1" alt="Love Wissel Day Ticket">
+                           <img src="https://readdy.ai/api/search-image?query=blue%20and%20purple%20ticket%20stub%20with%20text%20'DO%20ANYTHING'&width=500&height=200&seq=ticket2" alt="Do Anything Ticket">
+                           <img src="https://readdy.ai/api/search-image?query=red%20and%20gold%20ticket%20stub%20with%20text%20'SPECIAL%20MOVIE%20PREMIERE'&width=500&height=200&seq=ticket3" alt="Movie Premiere Ticket">
+                        </div>
+                        <div class="article-text serif-font">
+                            <p>Valentine's Day 2024 was so funny! At first, you told me that you didn't want anything. I kept asking what you wanted, but you never said what it could be. When the package arrived, it turned out to be what I wanted, a LEGO flower set. You said you didn't know what to get me, so you just got something for yourself that I also happened to really want. Honestly, I was so happy. And I made you a coupon, but you never used it, so now I get to keep it for myself, haha. Next time, just tell me what you want, don't get it for me and say it's for you!</p>
+                            <p>The funniest part was the next day when I sent you a LEGO flower set too! I told you I already knew what you wanted, because it was what I truly wanted. So, you ended up buying me the LEGO flowers, and I got a set for you. It was like we were on the same wavelength without even talking.</p>
+                            <p>Thank you, Wissel. This was my favorite Valentine's Day ever!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Fixed Home Button -->
+    <a id="home-button" href="{{ url_for('views.home') }}" class="home-button-fixed" title="Back to Home">🏠</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('nav a');
+            const backToMenuButtons = document.querySelectorAll('.back-to-menu-btn');
+            const pages = document.querySelectorAll('.page');
+            const homeButton = document.getElementById('home-button');
+
+            function showPage(pageId) {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                // Deactivate all nav links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Show the target page
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                // Activate the corresponding nav link
+                const activeLink = document.querySelector(`nav a[data-page="${pageId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+                
+                // --- THIS BLOCK WAS REMOVED ---
+                // The button will now be visible by default and this script
+                // will no longer hide it.
+            }
+
+            // Add click listeners to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.getAttribute('data-page');
+                    showPage(pageId);
+                    window.scrollTo(0, 0); // Scroll to top on page change
+                });
+            });
+
+            // Add click listeners to "Back to Menu" buttons
+            backToMenuButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage('page-home');
+                    window.scrollTo(0, 0); // Scroll to top
+                });
+            });
+
+            // Show the home page by default on initial load
+            showPage('page-home');
+        });
+    </script>
+
+</body>
+</html>

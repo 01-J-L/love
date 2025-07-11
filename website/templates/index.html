@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evermore Journeys - Romantic Getaways for Two Couples</title>
+<link rel="icon" href="https://readdy.ai/api/search-image?query=elegant%20logo%20with%20intertwined%20hearts%20and%20a%20subtle%20leaf%20motif%2C%20gold%20and%20burgundy%2C%20minimalist&width=100&height=100&seq=logo1" type="image/x-icon">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<!-- Added GSAP for the new heart animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    cursor: none; /* Hide default cursor on desktop */
+    overflow-x: hidden; /* Prevent horizontal scroll from animations */
+}
+h1, h2, h3, h4, .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+/* Apply custom cursor to interactive elements, but restore default on mobile */
+@media (hover: hover) and (pointer: fine) {
+    a, button, input, textarea, select, .experience-card, [role="button"] {
+        cursor: none;
+    }
+}
+.hero-bg {
+    background-image: url('https://readdy.ai/api/search-image?query=two%20happy%20couples%20enjoying%20a%20luxurious%20picnic%20at%20sunset%20on%20a%20beautiful%20cliffside%20overlooking%20the%20ocean%2C%20warm%20golden%20hour%20lighting%2C%20cinematic%2C%20ultra%20realistic&width=1920&height=1080&seq=hero1&orientation=landscape');
+    background-size: cover;
+    background-position: center;
+}
+.experience-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.experience-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(224, 197, 110, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+}
+.experience-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.experience-card:hover::before { animation: shine 1.5s; }
+@keyframes shine {
+    0% { left: -50%; }
+    100% { left: 150%; }
+}
+.experience-icon {
+    transition: all 0.3s ease;
+}
+.experience-card:hover .experience-icon {
+    transform: scale(1.1);
+}
+header {
+    transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+}
+.header-scrolled {
+    background-color: #312A2A; /* darkBackground */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #E0C56E;
+    box-shadow: 0 0 0 2px rgba(224, 197, 110, 0.3);
+}
+
+/* --- NEW CURSOR STYLES (Z-INDEX UPDATED) --- */
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #E9739A; /* lovePink */
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10002; /* Ensure it's on top of everything */
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+}
+.cursor-outline {
+    width: 35px;
+    height: 35px;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10001; /* Ensure it's on top of everything, but below the dot */
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+}
+.cursor-outline svg {
+    stroke: #A7414A; /* primary */
+    transition: all 0.2s ease-out;
+    fill: transparent;
+}
+.cursor-outline.grow {
+    transform: translate(-50%, -50%) scale(1.2);
+}
+.cursor-outline.grow svg {
+    fill: rgba(224, 197, 110, 0.2); /* secondary with alpha */
+    stroke: #E0C56E; /* secondary */
+}
+
+/* --- UPDATED HEART POP ANIMATION --- */
+.heart-particle {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0;
+    width: 20px; /* Size of the SVG container */
+    height: 20px;
+}
+.heart-particle svg {
+    width: 100%;
+    height: 100%;
+}
+.heart-particle.animate {
+    animation: heart-pop 0.8s ease-out forwards;
+}
+@keyframes heart-pop {
+    0% {
+        opacity: 1;
+        transform: scale(0.3) translate(-50%, -50%);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2) var(--transform-end) rotate(90deg); /* Set by JS */
+    }
+}
+/* --- END CURSOR STYLES --- */
+
+/* --- HEART GRID ANIMATION STYLES --- */
+#heart-grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 500px; /* Max size on desktop */
+    margin: 0 auto; /* Center it */
+    min-height: 320px;
+    perspective: 9999px;
+}
+
+#heart-grid-scene {
+    display: grid;
+    transform-style: preserve-3d;
+    gap: 8px; /* The gap between cubes */
+}
+
+.heart-cube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    transform-style: preserve-3d;
+}
+
+.heart-cube-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--face-color);
+    border: var(--border-style);
+}
+
+.heart-cube-face.face-top    { transform: translateY(-50%) rotateX(90deg); }
+.heart-cube-face.face-bottom { transform: translateY(50%) rotateX(-90deg); }
+.heart-cube-face.face-left   { transform: translateX(-50%) rotateY(-90deg); }
+.heart-cube-face.face-right  { transform: translateX(50%) rotateY(90deg); }
+.heart-cube-face.face-front  { transform: translateZ(50%); }
+.heart-cube-face.face-back   { transform: translateZ(-50%); }
+/* --- END HEART GRID ANIMATION STYLES --- */
+
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+.floating-delay-1 { animation-delay: 0.5s; }
+.floating-delay-2 { animation-delay: 1s; }
+.text-gradient {
+    background: linear-gradient(90deg, #A7414A, #E0C56E);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+/* Typing Cursor Animation */
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+</style>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#A7414A',secondary:'#E0C56E', accent: '#F7E7CE', textPrimary: '#4a4a4a', background: '#FEFBF6', darkBackground: '#312A2A', lovePink: {DEFAULT: '#E9739A', light: '#FADCE6'}},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+</head>
+<body class="bg-background text-textPrimary">
+<div class="cursor-dot hidden md:block"></div>
+<!-- Updated Cursor Outline with SVG Heart -->
+<div class="cursor-outline hidden md:block">
+    <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.0001 5.92306C10.5926 2.50004 7.19256 1.00003 4.50006 3.69253C1.80756 6.38503 2.50005 10.5925 5.92305 12.0001L12.0001 18.077L18.077 12.0001C21.5 10.5925 22.1925 6.38503 19.5 3.69253C16.8075 1.00003 13.4076 2.50004 12.0001 5.92306Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</div>
+
+<!-- Header -->
+<header class="fixed w-full z-50 py-4 bg-darkBackground/40 backdrop-blur-sm">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{{ url_for('views.home') }}" class="flex items-center space-x-3 group flex-shrink-0">
+                <img src="{{ url_for('static', filename='image/logo.png') }}" alt=" Journeys Logo" class="h-14 transition-transform duration-300 group-hover:scale-110">
+                <div>
+                    <span class="block text-xl font-serif" style="color: #FEFBF6">Our Journeys</span>
+                    <span class="block text-xs font-light text-white/80 tracking-widest uppercase">My cutiemels</span>
+                </div>
+            </a>
+            
+            <!-- Desktop Navigation (Centered) -->
+            <div class="hidden lg:flex justify-center items-center flex-grow">
+                <div class="flex items-center bg-[#1c1c1e]/50 p-1 rounded-2xl">
+                    <nav class="flex items-center space-x-1">
+                        <a href="{{ url_for('views.home') }}" class="flex items-center space-x-2 px-4 py-2 text-sm text-white bg-white/20 rounded-xl">
+                            <i class="ri-home-heart-line"></i>
+                            <span>Home</span>
+                        </a>
+                        <a href="#experiences" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                            <i class="ri-sparkling-2-line"></i>
+                            <span>Our Experiences</span>
+                        </a>
+                        <a href="#contact" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                            <i class="ri-customer-service-2-line"></i>
+                            <span>Concierge</span>
+                        </a>
+                        <a href="#testimonials" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                            <i class="ri-book-open-line"></i>
+                            <span>Love Stories</span>
+                        </a>
+                        <a href="#about" class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">
+                            <i class="ri-group-2-line"></i>
+                            <span>Our Story</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button & Spacer -->
+            <div class="flex items-center justify-end flex-shrink-0 w-12 h-12">
+                <button id="mobile-menu-button" class="lg:hidden text-white text-3xl focus:outline-none">
+                    <i class="ri-menu-line"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-darkBackground/95 absolute w-full left-0 top-full">
+        <nav class="flex flex-col space-y-2 p-4">
+            <a href="{{ url_for('views.home') }}" class="flex items-center space-x-3 p-3 text-white bg-white/20 rounded-lg">
+                <i class="ri-home-heart-line"></i>
+                <span>Home</span>
+            </a>
+            <a href="#experiences" class="flex items-center space-x-3 p-3 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <i class="ri-sparkling-2-line"></i>
+                <span>Our Experiences</span>
+            </a>
+            <a href="#contact" class="flex items-center space-x-3 p-3 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <i class="ri-customer-service-2-line"></i>
+                <span>Concierge</span>
+            </a>
+            <a href="#testimonials" class="flex items-center space-x-3 p-3 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <i class="ri-book-open-line"></i>
+                <span>Love Stories</span>
+            </a>
+            <a href="#about" class="flex items-center space-x-3 p-3 text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+                <i class="ri-group-2-line"></i>
+                <span>Our Story</span>
+            </a>
+        </nav>
+    </div>
+</header>
+<!-- Hero Section -->
+<section class="hero-bg relative min-h-[70vh] flex items-center justify-center pt-24">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent"></div>
+    <div class="container mx-auto px-6 py-24 relative z-10 flex flex-col lg:flex-row items-center gap-12 text-center lg:text-left">
+        <div class="lg:w-1/2 animate-on-scroll is-visible">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mb-6">Happy Birthday <span class="text-secondary">Melinda Dacallos (mels)♥</span></h1>
+            <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto lg:mx-0">I specialize craft this website to you cutiemels, creating shared moments that deepen our bonds and for a lifetime.</p>
+            <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                <a href="#contact" class="bg-secondary text-primary px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap">Plan a date?</a>
+                <a href="#experiences" class="bg-transparent border-2 border-accent text-accent px-8 py-3 !rounded-button font-medium hover:bg-accent/10 transition-all whitespace-nowrap">Explore Experiences</a>
+            </div>
+        </div>
+        <div class="lg:w-1/2 relative mt-12 lg:mt-0">
+             <div class="absolute -top-16 -left-16 w-32 h-32 bg-secondary/20 rounded-full blur-xl floating"></div>
+             <div class="absolute -bottom-8 -right-8 w-24 h-24 bg-primary/20 rounded-full blur-xl floating floating-delay-1"></div>
+             <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-accent/20 rounded-full blur-lg floating floating-delay-2"></div>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating animate-on-scroll is-visible" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-restaurant-2-line ri-lg text-secondary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Gourmet Dining</h3>
+                    <p class="text-white/80 text-sm">Exclusive culinary adventures</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating floating-delay-1 animate-on-scroll is-visible" style="transition-delay: 300ms;">
+                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-hotel-bed-line ri-lg text-primary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Luxury Stays</h3>
+                    <p class="text-white/80 text-sm">Private villas & boutique hotels</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating floating-delay-2 animate-on-scroll is-visible" style="transition-delay: 400ms;">
+                    <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-compass-3-line ri-lg text-primary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Shared Adventures</h3>
+                    <p class="text-white/80 text-sm">Once-in-a-lifetime activities</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 floating animate-on-scroll is-visible" style="transition-delay: 500ms;">
+                    <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mb-4"><i class="ri-landscape-line ri-lg text-secondary"></i></div>
+                    <h3 class="text-white text-lg font-semibold font-serif mb-2">Breathtaking Views</h3>
+                    <p class="text-white/80 text-sm">Scenery that inspires romance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Relationship Counter Section -->
+<section id="relationship-counter" class="py-16 bg-[#F8F7FA] overflow-hidden">
+    <div class="container mx-auto px-6 animate-on-scroll">
+        <div class="max-w-md mx-auto text-center">
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <div class="p-1 border-2 border-dashed border-lovePink rounded-full">
+                    <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Couple" class="w-12 h-12 rounded-full object-cover">
+                </div>
+                <div class="bg-lovePink-light text-lovePink text-sm font-semibold px-4 py-2 rounded-full">
+                    How long have we been together? ♥
+                </div>
+            </div>
+
+            <div id="years-months-display" class="text-lovePink text-xl font-bold tracking-widest mb-4">
+                LOADING...
+            </div>
+
+            <div class="flex items-center justify-center space-x-2 md:space-x-4 mb-6">
+                <div class="text-center">
+                    <div id="days" class="text-4xl md:text-6xl font-bold text-gray-400">0</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider">Days</div>
+                </div>
+                <div class="text-4xl md:text-6xl font-bold text-lovePink pb-5">:</div>
+                <div class="text-center">
+                    <div id="hours" class="text-4xl md:text-6xl font-bold text-lovePink">00</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider">Hrs</div>
+                </div>
+                <div class="text-4xl md:text-6xl font-bold text-lovePink pb-5">:</div>
+                <div class="text-center">
+                    <div id="minutes" class="text-4xl md:text-6xl font-bold text-lovePink">00</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider">Mins</div>
+                </div>
+                <div class="text-4xl md:text-6xl font-bold text-lovePink pb-5">:</div>
+                <div class="text-center">
+                    <div id="seconds" class="text-4xl md:text-6xl font-bold text-lovePink">00</div>
+                    <div class="text-sm text-gray-500 uppercase tracking-wider">Secs</div>
+                </div>
+            </div>
+
+            <button id="open-love-note-modal" class="bg-lovePink text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-opacity-90 transition-opacity flex items-center justify-center space-x-2 mx-auto mb-6">
+                <i class="ri-mail-heart-line"></i>
+                <span>A Note For You</span>
+            </button>
+            
+            <div class="flex items-center justify-center space-x-2">
+                <i class="ri-heart-fill text-lovePink"></i>
+                <i class="ri-heart-fill text-lovePink"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-lovePink">
+                    <path d="M222.7 32.1c5 16.9-4.6 34.8-21.5 40.8S166.4 68.2 161.4 51.3C156.4 34.4 166 16.5 183 10.5s34.8 4.6 39.7 21.5zM42.2 183.3c12.5-12.5 32.8-12.5 45.3 0l69 69c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-69-69c-12.5-12.5-12.5-32.8 0-45.3zM384 160c23.7 0 44.9 8.9 62.7 23.8c17.8 14.8 28.3 35.3 28.3 57.1c0 23.9-12.9 45.8-32.3 58.9c-5.4 3.6-11.4 6.6-17.7 8.8c13.4 13.4 21.7 31.3 21.7 51.2c0 39.8-32.2 72-72 72s-72-32.2-72-72c0-2.3 .1-4.6 .3-6.8c-10.6-5.8-19.5-13.8-26.3-23.2c-5.2 3.1-10.8 5.6-16.7 7.6c-11.8 4-24.4 6.3-37.6 6.3s-25.8-2.3-37.6-6.3c-5.9-2-11.5-4.5-16.7-7.6c-6.8 9.5-15.7 17.5-26.3 23.2c.2 2.2 .3 4.5 .3 6.8c0 39.8-32.2 72-72 72s-72-32.2-72-72c0-19.9 8.3-37.8 21.7-51.2c-6.3-2.2-12.3-5.2-17.7-8.8C12.9 281.8 0 259.9 0 235.9c0-21.8 10.5-42.3 28.3-57.1C46.1 168.9 67.3 160 91 160c11.8 0 23 2.1 33.6 6.1c5.2 2 10.2 4.3 14.9 6.9c7.1 3.9 14.5 6.9 22.2 8.9c13.9 3.6 28.8 5.6 44.2 5.6s30.3-2 44.2-5.6c7.7-2 15.1-5 22.2-8.9c4.7-2.6 9.7-4.9 14.9-6.9c10.6-4 21.8-6.1 33.6-6.1z"/>
+                </svg>
+                <i class="ri-heart-fill text-lovePink"></i>
+                <i class="ri-heart-fill text-lovePink"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="w-4 h-4 text-lovePink">
+                    <path d="M222.7 32.1c5 16.9-4.6 34.8-21.5 40.8S166.4 68.2 161.4 51.3C156.4 34.4 166 16.5 183 10.5s34.8 4.6 39.7 21.5zM42.2 183.3c12.5-12.5 32.8-12.5 45.3 0l69 69c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0l-69-69c-12.5-12.5-12.5-32.8 0-45.3zM384 160c23.7 0 44.9 8.9 62.7 23.8c17.8 14.8 28.3 35.3 28.3 57.1c0 23.9-12.9 45.8-32.3 58.9c-5.4 3.6-11.4 6.6-17.7 8.8c13.4 13.4 21.7 31.3 21.7 51.2c0 39.8-32.2 72-72 72s-72-32.2-72-72c0-2.3 .1-4.6 .3-6.8c-10.6-5.8-19.5-13.8-26.3-23.2c-5.2 3.1-10.8 5.6-16.7 7.6c-11.8 4-24.4 6.3-37.6 6.3s-25.8-2.3-37.6-6.3c-5.9-2-11.5-4.5-16.7-7.6c-6.8 9.5-15.7 17.5-26.3 23.2c.2 2.2 .3 4.5 .3 6.8c0 39.8-32.2 72-72 72s-72-32.2-72-72c0-19.9 8.3-37.8 21.7-51.2c-6.3-2.2-12.3-5.2-17.7-8.8C12.9 281.8 0 259.9 0 235.9c0-21.8 10.5-42.3 28.3-57.1C46.1 168.9 67.3 160 91 160c11.8 0 23 2.1 33.6 6.1c5.2 2 10.2 4.3 14.9 6.9c7.1 3.9 14.5 6.9 22.2 8.9c13.9 3.6 28.8 5.6 44.2 5.6s30.3-2 44.2-5.6c7.7-2 15.1-5 22.2-8.9c4.7-2.6 9.7-4.9 14.9-6.9c10.6-4 21.8-6.1 33.6-6.1z"/>
+                </svg>
+                <i class="ri-heart-fill text-lovePink"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu of Our Love Section -->
+<section id="menu-of-love" class="py-24 bg-lovePink-light/40">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-on-scroll">
+            <h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Menu of Our Love</h2>
+            <p class="text-lg text-lovePink max-w-2xl mx-auto">
+                A digital keepsake for every journey <i class="ri-heart-3-line"></i>
+            </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Memories Card (UPDATED) -->
+            <a href="{{ url_for('views.our_memories') }}" class="block no-underline text-center bg-white p-6 rounded-2xl shadow-lg border border-transparent hover:border-lovePink/50 hover:shadow-lovePink/20 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 100ms;">
+                <div class="w-20 h-20 bg-lovePink-light rounded-full flex items-center justify-center mb-5 mx-auto text-lovePink text-4xl">
+                    <i class="ri-gallery-line"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-serif text-primary mb-2">Our Memories</h3>
+                <p class="text-textPrimary/70 text-sm mb-4">A gallery of cherished moments, captured together.</p>
+                <i class="ri-heart-fill text-lovePink/50"></i>
+            </a>
+            <!-- Our Music Card (Was Calendar) -->
+            <a href="{{ url_for('views.music_player') }}" class="block text-center bg-white p-6 rounded-2xl shadow-lg border border-transparent hover:border-lovePink/50 hover:shadow-lovePink/20 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll no-underline" style="transition-delay: 200ms;">
+                <div class="w-20 h-20 bg-lovePink-light rounded-full flex items-center justify-center mb-5 mx-auto text-lovePink text-4xl">
+                    <i class="ri-music-2-line"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-serif text-primary mb-2">Our Music</h3>
+                <p class="text-textPrimary/70 text-sm mb-4">The soundtrack to our love story, a playlist for our moments.</p>
+                <i class="ri-heart-fill text-lovePink/50"></i>
+            </a>
+            <!-- Puzzle Card (Link) -->
+            <a href="{{ url_for('views.love_puzzle') }}" class="block text-center bg-white p-6 rounded-2xl shadow-lg border border-transparent hover:border-lovePink/50 hover:shadow-lovePink/20 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll no-underline" style="transition-delay: 300ms;">
+                <div class="w-20 h-20 bg-lovePink-light rounded-full flex items-center justify-center mb-5 mx-auto text-lovePink text-4xl">
+                    <i class="ri-puzzle-line"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-serif text-primary mb-2">Love Puzzle</h3>
+                <p class="text-textPrimary/70 text-sm mb-4">Discovering how perfectly you are cutiemels.</p>
+                <i class="ri-heart-fill text-lovePink/50"></i>
+            </a>
+            <!-- Notes Card (Link) -->
+            <a href="{{ url_for('views.letters') }}" class="block text-center bg-white p-6 rounded-2xl shadow-lg border border-transparent hover:border-lovePink/50 hover:shadow-lovePink/20 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll no-underline" style="transition-delay: 400ms;">
+                <div class="w-20 h-20 bg-lovePink-light rounded-full flex items-center justify-center mb-5 mx-auto text-lovePink text-4xl">
+                    <i class="ri-mail-heart-line"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-serif text-primary mb-2">Love Notes</h3>
+                <p class="text-textPrimary/70 text-sm mb-4">Sweet messages and promises to keep forever.</p>
+                <i class="ri-heart-fill text-lovePink/50"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ... (Rest of the HTML code remains the same) ... -->
+
+<section id="experiences" class="py-24 bg-white">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16 animate-on-scroll">
+<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Curated Experiences for Four</h2>
+<p class="text-lg text-textPrimary max-w-2xl mx-auto">We weave together moments of adventure, relaxation, and indulgence to create the perfect shared escape.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 100ms;">
+<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-hotel-bed-line ri-2x text-primary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">Luxury Accommodations</h3>
+<p class="text-textPrimary mb-6">From secluded villas to charming boutique hotels, we select exquisite properties that offer privacy, comfort, and romance.</p>
+<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+</div>
+<div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 200ms;">
+<div class="experience-icon w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-restaurant-2-line ri-2x text-secondary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">Gourmet Dining</h3>
+<p class="text-textPrimary mb-6">Indulge in private chef experiences, exclusive vineyard tours, and reservations at the most sought-after restaurants.</p>
+<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+</div>
+<div class="experience-card relative bg-white p-8 rounded-lg shadow-lg border border-gray-100 hover:border-secondary transition-all animate-on-scroll" style="transition-delay: 300ms;">
+<div class="experience-icon w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6"><i class="ri-compass-3-line ri-2x text-primary"></i></div>
+<h3 class="text-xl font-semibold font-serif text-primary mb-3">Shared Adventures</h3>
+<p class="text-textPrimary mb-6">Create lasting memories with curated activities, from sunrise hot-air balloon rides to private yacht excursions.</p>
+<a href="#contact" class="inline-flex items-center text-secondary font-medium">Learn more<i class="ri-arrow-right-line ml-2"></i></a>
+</div>
+</div>
+</div>
+</section>
+<section id="about" class="py-24 bg-accent/30 overflow-x-hidden">
+<div class="container mx-auto px-6">
+<!-- UPDATED: Flex container is now flex-col-reverse on mobile -->
+<div class="flex flex-col-reverse md:flex-row items-center gap-12">
+    <!-- HEART GRID ANIMATION CONTAINER -->
+    <div class="md:w-1/2 w-full animate-on-scroll">
+        <div id="heart-grid-container">
+            <div id="heart-grid-scene">
+                <!-- Cubes will be generated here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    <div class="md:w-1/2 animate-on-scroll" style="transition-delay: 200ms;">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary mb-6">I have something to say, And this is fueled by my Love</h2>
+        <p class="text-textPrimary mb-6">Evermore Journeys was born from our own cherished travels. As two couples who love exploring the world together, we discovered a unique magic in shared experiences—the laughter, the discoveries, the quiet moments. We created this service to help other couples find that same joy.</p>
+        <p class="text-textPrimary mb-8">Our team of passionate travel planners is dedicated to the art of romance and friendship, meticulously crafting every detail to ensure your journey is as seamless as it is unforgettable.</p>
+        <a href="{{ url_for('views.flower_entry') }}" class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap">View</a>
+    </div>
+</div>
+</div>
+</section>
+<section id="journeys" class="py-24 bg-white">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16 animate-on-scroll">
+<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Signature Romantic Journeys</h2>
+<p class="text-lg text-textPrimary max-w-2xl mx-auto">Be inspired by our collection of curated getaways, each designed to ignite romance and create beautiful shared memories.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 100ms;">
+<div class="relative overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=romantic%20villa%20in%20Tuscany%20Italy%20at%20sunset%2C%20with%20a%20couple%20in%20the%20foreground%2C%20beautiful%20landscape%20with%20vineyards&width=600&height=400&seq=proj1&orientation=landscape" alt="Tuscan Villa" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Tuscan Sunset Escape</h4><p class="text-white/80">Italy</p></div>
+</div>
+</div>
+<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">A Taste of La Dolce Vita</h3><p class="text-textPrimary mb-4">Indulge in wine tasting, private cooking classes, and stay in a breathtaking villa overlooking the rolling hills of Tuscany.</p></div>
+</div>
+<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 200ms;">
+<div class="relative overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=classic%20white%20buildings%20of%20Santorini%20Greece%20overlooking%20the%20caldera%2C%20a%20couple%20watching%20the%20sunset%20from%20a%20private%20balcony&width=600&height=400&seq=proj2&orientation=landscape" alt="Santorini Sunset" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Santorini Sea & Sky</h4><p class="text-white/80">Greece</p></div>
+</div>
+</div>
+<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">Aegean Dreams</h3><p class="text-textPrimary mb-4">Sail the caldera on a private catamaran, explore charming villages, and witness legendary sunsets from your cliffside suite.</p></div>
+</div>
+<div class="bg-white rounded-lg overflow-hidden shadow-lg group animate-on-scroll" style="transition-delay: 300ms;">
+<div class="relative overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=beautiful%20Japanese%20garden%20in%20Kyoto%20with%20cherry%20blossoms%20in%20full%20bloom%2C%20a%20couple%20walking%20on%20a%20path&width=600&height=400&seq=proj3&orientation=landscape" alt="Kyoto Garden" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+<div class="p-6"><h4 class="text-white text-xl font-semibold font-serif">Kyoto Cherry Blossom Dream</h4><p class="text-white/80">Japan</p></div>
+</div>
+</div>
+<div class="p-6"><h3 class="text-xl font-semibold font-serif text-primary mb-2">Serenity in Bloom</h3><p class="text-textPrimary mb-4">Experience the ephemeral beauty of sakura season. Visit ancient temples, participate in a tea ceremony, and stay in a traditional Ryokan.</p></div>
+</div>
+</div>
+</div>
+</section>
+<section id="testimonials" class="py-24 bg-accent/30">
+<div class="container mx-auto px-6">
+<div class="text-center mb-16 animate-on-scroll">
+<h2 class="text-3xl md:text-5xl font-serif font-bold text-primary mb-4">Love notes for us</h2>
+<p class="text-lg text-textPrimary max-w-2xl mx-auto">Hear my every thought and feelings about you</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 100ms;">
+<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
+<p class="text-textPrimary mb-6 italic">"Evermore Journeys planned the most magical and seamless trip to the Amalfi Coast for us and our best friends. Every detail was perfect, allowing us to simply relax and enjoy each other's company. Unforgettable!"</p>
+<div class="flex items-center"><div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4"><span class="text-primary font-semibold font-serif text-lg">O&L</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Olivia & Liam</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
+</div>
+<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 200ms;">
+<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
+<p class="text-textPrimary mb-6 italic">"Traveling with another couple can be tricky to plan, but our planner made it effortless. The mix of shared activities and private time was perfect. We rekindled our romance and deepened our friendship. Thank you!"</p>
+<div class="flex items-center"><div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mr-4"><span class="text-secondary font-semibold font-serif text-lg">C&N</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Chloe & Noah</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
+</div>
+<div class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-on-scroll" style="transition-delay: 300ms;">
+<div class="flex items-center mb-6"><div class="text-secondary"><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i><i class="ri-star-s-fill ri-lg"></i></div></div>
+<p class="text-textPrimary mb-6 italic">"The personalized touches set our trip apart. From a surprise champagne toast at sunset to a handwritten note at our villa, we felt so cared for. It was more than a vacation; it was an experience we will cherish forever."</p>
+<div class="flex items-center"><div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4"><span class="text-primary font-semibold font-serif text-lg">A&E</span></div><div><h4 class="text-lg font-semibold font-serif text-primary">Ava & Ethan</h4><p class="text-sm text-textPrimary">Happy Travelers</p></div></div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-primary relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-10" style="background-image: url('https://readdy.ai/api/search-image?query=abstract%20soft%20bokeh%20lights%2C%20gold%20and%20red%20tones%2C%20romantic%20background&width=800&height=800&seq=cta1&orientation=squarish'); background-size: cover;"></div>
+<div class="container mx-auto px-6 relative z-10 animate-on-scroll">
+<div class="max-w-3xl mx-auto text-center">
+<h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-6">Ready to Create Your Forever Story?</h2>
+<p class="text-lg text-white/80 mb-8">Let us design a unique getaway for you and your favorite couple. A journey of romance, friendship, and discovery awaits.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<a href="#contact" class="bg-secondary text-primary px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap">Design Your Dream Trip</a>
+<a href="#journeys" class="bg-transparent border-2 border-white text-white px-8 py-3 !rounded-button font-medium hover:bg-white/10 transition-all whitespace-nowrap">See Our Packages</a>
+</div>
+</div>
+</div>
+</section>
+<section id="contact" class="py-24 bg-white overflow-x-hidden">
+<div class="container mx-auto px-6">
+<div class="flex flex-col lg:flex-row gap-12">
+<div class="lg:w-1/2 animate-on-scroll">
+<h2 class="text-3xl md:text-4xl font-serif font-bold text-primary mb-6">Begin Your Journey</h2>
+<p class="text-textPrimary mb-8">Have questions, or are you ready to start planning? Contact our romance planners for a complimentary consultation. We're excited to help you craft the perfect double-couples' escape.</p>
+<form class="space-y-6">
+<div><label for="name" class="block text-sm font-medium text-textPrimary mb-2">Your Full Name</label><input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="Melinda Dacallos"></div>
+<div><label for="email" class="block text-sm font-medium text-textPrimary mb-2">Email Address</label><input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="melinda@example.com"></div>
+<div><label for="message" class="block text-sm font-medium text-textPrimary mb-2">Tell Us About Your Dream Trip</label><textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary" placeholder="We're dreaming of a coastal escape with great food and relaxation..."></textarea></div>
+<button type="submit" class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-all whitespace-nowrap w-full md:w-auto">Send Inquiry</button>
+</form>
+</div>
+<div class="lg:w-1/2 animate-on-scroll" style="transition-delay: 200ms;">
+<div class="bg-accent/30 rounded-lg overflow-hidden h-full">
+<div class="h-64 relative"><div style="background-image: url('https://readdy.ai/api/search-image?query=beautiful%20stylized%20world%20map%20with%20romantic%20travel%20destinations%20marked%20with%20hearts%2C%20elegant%2C%20vintage%20aesthetic&width=800&height=400&seq=map1'); background-size: cover; background-position: center;" class="absolute inset-0"></div></div>
+<div class="p-8">
+    <h3 class="text-xl font-semibold font-serif text-primary mb-4">Contact Information</h3>
+    <ul class="space-y-4">
+        <li class="flex items-start"><div class="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0"><i class="ri-mail-line text-secondary"></i></div><div><p class="text-sm text-textPrimary">Email</p><p class="text-primary font-medium">johnlesterolingay@gmail.com</p></div></li>
+        <li class="flex items-start"><div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-4 flex-shrink-0"><i class="ri-phone-line text-primary"></i></div><div><p class="text-sm text-textPrimary">Phone</p><p class="text-primary font-medium">09705631718</p></div></li>
+    </ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-darkBackground text-white pt-16 pb-8">
+<div class="container mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+<div><a href="{{ url_for('views.home') }}" class="text-3xl text-white mb-6 inline-block font-serif">J.L. and Mels Journeys</a><p class="text-white/70 mb-6">I specialize craft this website to you cutiemels, creating shared moments that deepen our bonds and for a lifetime.</p></div>
+<div><h3 class="text-xl font-semibold font-serif mb-6">Quick Links</h3><ul class="space-y-3"><li><a href="#about" class="text-white/70 hover:text-secondary transition-colors">Our Story</a></li><li><a href="#journeys" class="text-white/70 hover:text-secondary transition-colors">Signature Journeys</a></li><li><a href="#testimonials" class="text-white/70 hover:text-secondary transition-colors">Testimonials</a></li><li><a href="#contact" class="text-white/70 hover:text-secondary transition-colors">Contact Us</a></li></ul></div>
+<div><h3 class="text-xl font-semibold font-serif mb-6">Connect with J.L.</h3><div class="flex space-x-4"><a href="https://www.tiktok.com/@supremec6?_t=ZS-8xlxvVp0l55&_r=1" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"><i class="ri-tiktok-fill"></i></a><a href="https://www.instagram.com/_jlstr/" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"><i class="ri-instagram-fill"></i></a><a href="https://www.facebook.com/john.olingay" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all"><i class="ri-facebook-fill"></i></a></div></div>
+<div><h3 class="text-xl font-semibold font-serif mb-6">Contact Me</h3><ul class="space-y-4"><li class="flex items-start"><div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-4 flex-shrink-0"><i class="ri-map-pin-line"></i></div><a href="https://maps.app.goo.gl/4t592yih8sjRYHc1A" target="_blank" rel="noopener noreferrer" class="text-white/70 hover:text-secondary transition-colors">19 Sitio Kanluran, Payapa<br>Padre Garcia Batangas</a></li><li class="flex items-start"><div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mr-4 flex-shrink-0"><i class="ri-phone-line"></i></div><span class="text-white/70">09705631718</span></li></ul></div>
+</div>
+<div class="pt-8 border-t border-white/20 text-center"><p class="text-white/60 text-sm">© {{ current_year }} J.L. & Mels Journeys. All rights reserved.</p></div>
+</div>
+</footer>
+
+<!-- Love Note Modal -->
+<div id="love-note-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+    <div id="love-note-dialog" class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-auto p-6 md:p-8 relative transform scale-95 transition-all duration-300">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-serif font-bold text-lovePink">My Love</h3>
+            <button id="close-love-note-modal" class="text-gray-400 hover:text-primary transition-colors">
+                <i class="ri-close-line ri-2x"></i>
+            </button>
+        </div>
+        <div class="text-gray-600 mb-6 leading-relaxed min-h-[260px] sm:min-h-[220px] relative flex flex-wrap items-start" style="font-family: 'Poppins', sans-serif;">
+            <p id="love-note-text" class="whitespace-pre-wrap"></p>
+            <span id="typing-cursor" class="bg-lovePink" style="width: 2px; height: 1.25em; animation: blink 1s step-end infinite; display: inline-block; margin-left: 2px;"></span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <button id="skip-typing-button" class="bg-lovePink-light text-lovePink font-semibold px-6 py-2 rounded-full hover:bg-opacity-80 transition-opacity w-full sm:w-auto">
+                Skip typing
+            </button>
+            <p id="love-note-signature" class="text-gray-500 italic hidden">Forever yours</p>
+        </div>
+    </div>
+</div>
+
+<button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center opacity-0 invisible transition-all z-50 hover:bg-opacity-90"><i class="ri-arrow-up-line ri-lg"></i></button>
+
+<script id="main-scripts">
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Mobile Menu Toggle ---
+    const menuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = menuButton.querySelector('i');
+    menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        menuIcon.classList.toggle('ri-menu-line');
+        menuIcon.classList.toggle('ri-close-line');
+    });
+
+    // --- Custom Cursor & Heart Pop Logic ---
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        
+        const animateCursor = () => {
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+            const speed = 0.15;
+            outlineX += (mouseX - outlineX) * speed;
+            outlineY += (mouseY - outlineY) * speed;
+            cursorOutline.style.left = `${outlineX}px`;
+            cursorOutline.style.top = `${outlineY}px`;
+            requestAnimationFrame(animateCursor);
+        };
+        requestAnimationFrame(animateCursor);
+        
+        document.querySelectorAll('a, button, input, textarea, select, .experience-card, [role="button"]').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('grow'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('grow'));
+        });
+
+        // UPDATED: Heart pop on click with SVG
+        document.body.addEventListener('click', (e) => {
+            if (e.target.closest('#heart-grid-scene') || e.target.closest('#love-note-modal')) return; // Don't pop on the grid or modal
+
+            const heartCount = 10;
+            const colors = ['#A7414A', '#E0C56E', '#E9739A']; // primary, secondary, lovePink
+            const heartSVG = `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.0001 5.92306C10.5926 2.50004 7.19256 1.00003 4.50006 3.69253C1.80756 6.38503 2.50005 10.5925 5.92305 12.0001L12.0001 18.077L18.077 12.0001C21.5 10.5925 22.1925 6.38503 19.5 3.69253C16.8075 1.00003 13.4076 2.50004 12.0001 5.92306Z"/></svg>`;
+
+            for (let i = 0; i < heartCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('heart-particle');
+                particle.innerHTML = heartSVG;
+                document.body.appendChild(particle);
+                
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const randomAngle = Math.random() * Math.PI * 2;
+                const randomDistance = Math.random() * 60 + 30;
+                const endX = Math.cos(randomAngle) * randomDistance;
+                const endY = Math.sin(randomAngle) * randomDistance;
+
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                particle.querySelector('svg').style.fill = randomColor;
+                particle.style.setProperty('--transform-end', `translate(${endX}px, ${endY}px)`);
+
+                setTimeout(() => particle.classList.add('animate'), Math.random() * 50);
+                setTimeout(() => particle.remove(), 850);
+            }
+        });
+    }
+
+    // --- Back to Top Button ---
+    const backToTopButton = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        backToTopButton.classList.toggle('opacity-0', window.scrollY <= 300);
+        backToTopButton.classList.toggle('invisible', window.scrollY <= 300);
+    });
+    backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    
+    // --- Dynamic Header on Scroll ---
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        header.classList.toggle('header-scrolled', window.scrollY > 50);
+    });
+
+    // --- Animate Elements on Scroll ---
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // --- Relationship Counter Logic ---
+    const relationshipStartDate = new Date('2025-06-28T00:00:00');
+    const yearsMonthsDisplay = document.getElementById('years-months-display');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    function updateRelationshipCounter() {
+        if (!yearsMonthsDisplay) return; // Stop if element not found
+        const now = new Date();
+        const diff = now - relationshipStartDate;
+        const totalSeconds = Math.floor(diff / 1000);
+        const totalDays = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+
+        let years = now.getFullYear() - relationshipStartDate.getFullYear();
+        let months = now.getMonth() - relationshipStartDate.getMonth();
+        if (now.getDate() < relationshipStartDate.getDate()) { months--; }
+        if (months < 0) { years--; months += 12; }
+
+        daysEl.textContent = totalDays;
+        hoursEl.textContent = String(hours).padStart(2, '0');
+        minutesEl.textContent = String(minutes).padStart(2, '0');
+        secondsEl.textContent = String(seconds).padStart(2, '0');
+        
+        const yearText = years === 1 ? 'YEAR' : 'YEARS';
+        const monthText = months === 1 ? 'MONTH' : 'MONTHS';
+        yearsMonthsDisplay.textContent = `${years} ${yearText} ${months} ${monthText}`;
+    }
+
+    if(document.getElementById('relationship-counter')) {
+        updateRelationshipCounter();
+        setInterval(updateRelationshipCounter, 1000);
+    }
+    
+    // --- Love Note Modal Logic ---
+    const loveNoteModal = document.getElementById('love-note-modal');
+    if (loveNoteModal) {
+        const openModalBtn = document.getElementById('open-love-note-modal');
+        const closeModalBtn = document.getElementById('close-love-note-modal');
+        const skipTypingBtn = document.getElementById('skip-typing-button');
+        const loveNoteTextEl = document.getElementById('love-note-text');
+        const loveNoteDialog = document.getElementById('love-note-dialog');
+        const typingCursor = document.getElementById('typing-cursor');
+        const signatureEl = document.getElementById('love-note-signature');
+
+        const fullMessage = "Happy Birthday, my love! ❤️\n\nLooking back on all the beautiful memories we've made together, I can't help but smile. From the first time we met to all the little moments in between, every second with you has been magical.\n\nI still remember our first adventures, the late-night talks that made us feel like the only two people in the world, and the laughter that fills every moment we share.\n\nI love you always. ❤️";
+        let typeInterval;
+
+        const typeWriter = () => {
+            let i = 0;
+            loveNoteTextEl.textContent = '';
+            signatureEl.classList.add('hidden');
+            skipTypingBtn.classList.remove('hidden');
+            typingCursor.style.display = 'inline-block';
+
+            typeInterval = setInterval(() => {
+                if (i < fullMessage.length) {
+                    loveNoteTextEl.textContent += fullMessage.charAt(i);
+                    i++;
+                } else {
+                    finishTyping();
+                }
+            }, 50); // Typing speed
+        };
+
+        const finishTyping = () => {
+            clearInterval(typeInterval);
+            loveNoteTextEl.textContent = fullMessage; // Ensure full message
+            skipTypingBtn.classList.add('hidden');
+            typingCursor.style.display = 'none';
+            signatureEl.classList.remove('hidden');
+        };
+
+        const openModal = () => {
+            loveNoteModal.classList.remove('hidden');
+            setTimeout(() => {
+                loveNoteModal.classList.remove('opacity-0');
+                loveNoteDialog.classList.remove('scale-95');
+                typeWriter();
+            }, 10);
+        };
+        
+        const closeModal = () => {
+            clearInterval(typeInterval);
+            loveNoteModal.classList.add('opacity-0');
+            loveNoteDialog.classList.add('scale-95');
+            setTimeout(() => {
+                loveNoteModal.classList.add('hidden');
+                loveNoteTextEl.textContent = ''; // Reset for next time
+            }, 300); // Match transition duration
+        };
+
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        skipTypingBtn.addEventListener('click', finishTyping);
+        
+        // Close modal if clicking on the backdrop
+        loveNoteModal.addEventListener('click', (e) => {
+            if (e.target === loveNoteModal) {
+                closeModal();
+            }
+        });
+    }
+
+
+    // --- DYNAMIC HEART GRID ANIMATION SCRIPT ---
+    const heartGridContainer = document.getElementById('heart-grid-container');
+    if (heartGridContainer) {
+        const heartGridScene = document.getElementById('heart-grid-scene');
+
+        // --- Configuration ---
+        const heartShape = [
+            "  xxx   xxx  ", " xxxxx xxxxx ", "xxxxxxxxxxxxx", "xxxxxxxxxxxxx", "xxxxxxxxxxxxx",
+            " xxxxxxxxxxx ", "  xxxxxxxxx  ", "   xxxxxxx   ", "    xxxxx    ",
+            "     xxx     ", "      x      "
+        ];
+        const numRows = heartShape.length;
+        const numCols = heartShape[0].length;
+        const maxAngle = 45;
+        const radius = 5;
+        const faceColor = '#A7414A'; // primary color
+        const rippleColor = '#FADCE6'; // lovePink.light
+        const rippleSpeed = 1.5;
+        const borderStyle = '1px solid rgba(254, 251, 246, 0.2)';
+        const gap = 8; // The gap between cubes in pixels
+
+        let userIsActive = false;
+        let idleTimer;
+        let simPos = { x: Math.random() * numCols, y: Math.random() * numRows };
+        let simTarget = { x: Math.random() * numCols, y: Math.random() * numRows };
+        
+        // --- Grid Generation (now dynamic) ---
+        const generateGrid = () => {
+            heartGridScene.innerHTML = ''; // Clear previous grid
+            
+            // Calculate cube size based on container width
+            const containerWidth = heartGridContainer.clientWidth;
+            const maxDesktopSize = 25;
+            const calculatedSize = Math.floor((containerWidth - (gap * (numCols - 1))) / numCols);
+            const cubeSize = Math.min(maxDesktopSize, calculatedSize);
+
+            heartGridScene.style.gridTemplateColumns = `repeat(${numCols}, ${cubeSize}px)`;
+            heartGridScene.style.gridTemplateRows = `repeat(${numRows}, ${cubeSize}px)`;
+            heartGridScene.style.setProperty('--face-color', faceColor);
+            heartGridScene.style.setProperty('--border-style', borderStyle);
+
+            for (let r = 0; r < numRows; r++) {
+                for (let c = 0; c < numCols; c++) {
+                    if (heartShape[r][c] === 'x') {
+                        const cube = document.createElement('div');
+                        cube.className = 'heart-cube';
+                        cube.dataset.row = r;
+                        cube.dataset.col = c;
+                        
+                        const halfSize = cubeSize / 2;
+                        cube.innerHTML = `
+                            <div class="heart-cube-face face-top"    style="transform: translateY(-${halfSize}px) rotateX(90deg);"></div>
+                            <div class="heart-cube-face face-bottom" style="transform: translateY(${halfSize}px) rotateX(-90deg);"></div>
+                            <div class="heart-cube-face face-left"   style="transform: translateX(-${halfSize}px) rotateY(-90deg);"></div>
+                            <div class="heart-cube-face face-right"  style="transform: translateX(${halfSize}px) rotateY(90deg);"></div>
+                            <div class="heart-cube-face face-front"  style="transform: translateZ(${halfSize}px);"></div>
+                            <div class="heart-cube-face face-back"   style="transform: translateZ(-${halfSize}px);"></div>
+                        `;
+                        heartGridScene.appendChild(cube);
+                    } else {
+                        heartGridScene.appendChild(document.createElement('div')); // Placeholder for gap
+                    }
+                }
+            }
+        }
+        
+        // --- Animation Logic ---
+        const tiltAt = (rowCenter, colCenter) => {
+            heartGridScene.querySelectorAll('.heart-cube').forEach(cube => {
+                const r = +cube.dataset.row;
+                const c = +cube.dataset.col;
+                const dist = Math.hypot(r - rowCenter, c - colCenter);
+                
+                if (dist <= radius) {
+                    const pct = 1 - dist / radius;
+                    const angle = pct * maxAngle;
+                    gsap.to(cube, { duration: 0.3, ease: 'power3.out', overwrite: true, rotateX: -angle, rotateY: angle });
+                } else {
+                    gsap.to(cube, { duration: 0.6, ease: 'power3.out', overwrite: true, rotateX: 0, rotateY: 0 });
+                }
+            });
+        };
+
+        const onPointerMove = (e) => {
+            userIsActive = true;
+            clearTimeout(idleTimer);
+            
+            const rect = heartGridScene.getBoundingClientRect();
+            const cellW = rect.width / numCols;
+            const cellH = rect.height / numRows;
+            const colCenter = (e.clientX - rect.left) / cellW;
+            const rowCenter = (e.clientY - rect.top) / cellH;
+            
+            requestAnimationFrame(() => tiltAt(rowCenter, colCenter));
+            
+            idleTimer = setTimeout(() => { userIsActive = false; }, 3000);
+        };
+        
+        const resetAll = () => {
+            heartGridScene.querySelectorAll('.heart-cube').forEach(cube => {
+                gsap.to(cube, { duration: 0.8, rotateX: 0, rotateY: 0, ease: 'power3.out' });
+            });
+        };
+
+        const onClick = (e) => {
+            const rect = heartGridScene.getBoundingClientRect();
+            const cellW = rect.width / numCols;
+            const cellH = rect.height / numRows;
+            const colHit = Math.floor((e.clientX - rect.left) / cellW);
+            const rowHit = Math.floor((e.clientY - rect.top) / cellH);
+
+            const baseRingDelay = 0.15, baseAnimDur = 0.3, baseHold = 0.6;
+            const spreadDelay = baseRingDelay / rippleSpeed;
+            const animDuration = baseAnimDur / rippleSpeed;
+            const holdTime = baseHold / rippleSpeed;
+
+            const rings = {};
+            heartGridScene.querySelectorAll('.heart-cube').forEach(cube => {
+                const r = +cube.dataset.row;
+                const c = +cube.dataset.col;
+                const dist = Math.hypot(r - rowHit, c - colHit);
+                const ring = Math.round(dist);
+                if (!rings[ring]) rings[ring] = [];
+                rings[ring].push(cube);
+            });
+
+            Object.keys(rings).map(Number).sort((a, b) => a - b).forEach(ring => {
+                const delay = ring * spreadDelay;
+                const faces = rings[ring].flatMap(cube => Array.from(cube.querySelectorAll('.heart-cube-face')));
+                
+                gsap.to(faces, { backgroundColor: rippleColor, duration: animDuration, delay, ease: 'power3.out' });
+                gsap.to(faces, { backgroundColor: faceColor, duration: animDuration, delay: delay + animDuration + holdTime, ease: 'power3.out' });
+            });
+        };
+
+        // --- Auto-Animate (Idle) Logic ---
+        const autoAnimateLoop = () => {
+            if (!userIsActive) {
+                const speed = 0.02;
+                simPos.x += (simTarget.x - simPos.x) * speed;
+                simPos.y += (simTarget.y - simPos.y) * speed;
+                tiltAt(simPos.y, simPos.x);
+
+                if (Math.hypot(simPos.x - simTarget.x, simPos.y - simTarget.y) < 0.1) {
+                    simTarget = { x: Math.random() * numCols, y: Math.random() * numRows };
+                }
+            }
+            requestAnimationFrame(autoAnimateLoop);
+        };
+        
+        // --- Initialize and Attach ---
+        generateGrid(); // Initial generation
+        heartGridScene.addEventListener('pointermove', onPointerMove);
+        heartGridScene.addEventListener('pointerleave', resetAll);
+        heartGridScene.addEventListener('click', onClick);
+        
+        // Run idle animation only on desktop for performance
+        if (window.innerWidth >= 768) {
+             autoAnimateLoop();
+        }
+
+        // Re-generate grid on window resize
+        window.addEventListener('resize', () => {
+             // Use a timeout to avoid spamming the function during resize
+             clearTimeout(window.resizeTimer);
+             window.resizeTimer = setTimeout(generateGrid, 250);
+        });
+    }
+});
+</script>
+</body>
+</html>
