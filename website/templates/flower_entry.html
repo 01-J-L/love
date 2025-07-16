@@ -71,12 +71,11 @@
       justify-content: center;
       gap: 0.25rem; /* Small gap between characters */
 
-      /* DYNAMIC FONT SIZE: clamp(MIN, PREFERRED, MAX) */
-      /* Scales font from 2rem (32px) to 5rem (80px) based on 8% of viewport width */
-      font-size: clamp(2rem, 8vw, 5rem);
+      /* DYNAMIC FONT SIZE: Adjusted for smaller mobile views */
+      font-size: clamp(1.75rem, 6vw, 5rem);
 
-      /* DYNAMIC LETTER SPACING: Scales from 0.25rem to 1.5rem */
-      letter-spacing: clamp(0.25rem, 2vw, 1.5rem);
+      /* DYNAMIC LETTER SPACING: Adjusted for smaller mobile views */
+      letter-spacing: clamp(0.2rem, 1.5vw, 1rem);
     }
 
     @keyframes typing {
@@ -90,7 +89,7 @@
       animation-delay: var(--delay);
     }
 
-    /* 5. BUTTON STYLES (Largely unchanged, but now part of a better layout) */
+    /* 5. BUTTON STYLES (now responsive) */
     a {
       text-decoration: none;
     }
@@ -152,7 +151,7 @@
 
     <!-- Button -->
     <!-- Note: The original href was a Flask template tag.
-         Replaced with a standard link. Change "flower_display.html" to your target file. -->
+         Replaced with a standard link. Change to your target file. -->
     <a href="{{ url_for('views.flower_display') }}" class="btn">
       <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
         <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>

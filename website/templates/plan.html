@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My cutiemels
+</title>
+    <!-- Copied from index.html for consistent theme -->
+    <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E🌸%3C%2Ftext%3E%3C%2Fsvg%3E" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            cursor: none; /* Hide default cursor */
+            /* Background from puzzle.html */
+            background-color: #fff0f5; /* Lavender Blush */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'%3E%3Cpath d='M50 85 C-20 40, 20 10, 50 40 C80 10, 120 40, 50 85' fill='%23f9e4e9'/%3E%3C/svg%3E");
+            background-size: 80px 80px;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Restore default cursor on non-hover devices */
+        @media (hover: none) {
+            body, a, button, input, textarea, select {
+                cursor: auto;
+            }
+        }
+        @media (hover: hover) and (pointer: fine) {
+            a, button, input, textarea, select, [role="button"] {
+                cursor: none;
+            }
+        }
+        header {
+            transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+        }
+        .header-scrolled {
+            background-color: #312A2A; /* darkBackground */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        /* Custom Cursor Styles from index.html */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #E9739A; /* lovePink */
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10002;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        .cursor-outline {
+            width: 35px;
+            height: 35px;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+        }
+        .cursor-outline svg {
+            stroke: #A7414A; /* primary */
+            transition: all 0.2s ease-out;
+            fill: transparent;
+        }
+        .cursor-outline.grow {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        .cursor-outline.grow svg {
+            fill: rgba(224, 197, 110, 0.2); /* secondary with alpha */
+            stroke: #E0C56E; /* secondary */
+        }
+    </style>
+    <!-- Tailwind Config from index.html -->
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#A7414A',secondary:'#E0C56E', accent: '#F7E7CE', textPrimary: '#4a4a4a', background: '#FEFBF6', darkBackground: '#312A2A', lovePink: {DEFAULT: '#E9739A', light: '#FADCE6'}},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+</head>
+<body class="text-textPrimary">
+
+    <!-- Custom Cursor HTML -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block">
+        <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.0001 5.92306C10.5926 2.50004 7.19256 1.00003 4.50006 3.69253C1.80756 6.38503 2.50005 10.5925 5.92305 12.0001L12.0001 18.077L18.077 12.0001C21.5 10.5925 22.1925 6.38503 19.5 3.69253C16.8075 1.00003 13.4076 2.50004 12.0001 5.92306Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+
+    <!-- React App Root -->
+    <main class="pt-24">
+        <div id="root"></div>
+    </main>
+
+    <!-- Floating Action Buttons -->
+    <!-- Home Button -->
+    <!-- MODIFIED: Made button smaller and closer to the edge on mobile screens -->
+    <a href="{{ url_for('views.home') }}" id="home-button" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 w-10 h-10 sm:w-12 sm:h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg z-50 hover:bg-opacity-90 transition-all" aria-label="Go to Home Page">
+        <i class="ri-home-line ri-lg"></i>
+    </a>
+    
+    <!-- React and Babel CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Re-themed React App Script -->
+    <script type="text/babel">
+
+        
+        const App = (() => {
+            const { useState, useEffect } = React;
+
+            const DatePlannerPage = ({
+                datePlan, setDatePlan, currentStep, setCurrentStep,
+                message, setMessage, loading, saveDatePlan, resetForm, editingPlanId
+            }) => {
+                const handleInputChange = (e) => {
+                    const { name, value, type, checked } = e.target;
+                    setDatePlan(prev => ({
+                        ...prev,
+                        [name]: type === 'checkbox' ? checked : value
+                    }));
+                };
+
+                const nextStep = () => {
+                    setMessage('');
+                    setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+                };
+
+                const prevStep = () => {
+                    setMessage('');
+                    setCurrentStep(prev => Math.max(prev - 1, 0));
+                };
+
+                const steps = [
+                    {
+                        title: "Step 1: Name Your Date",
+                        content: (
+                            <input type="text" name="name" placeholder="e.g., Anniversary Dinner, Movie Night" value={datePlan.name} onChange={handleInputChange} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30" required />
+                        ),
+                    },
+                    {
+                        title: "Step 2: Set The Time",
+                        content: (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="date" name="date" value={datePlan.date} onChange={handleInputChange} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30" required />
+                                <input type="time" name="time" value={datePlan.time} onChange={handleInputChange} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30" required />
+                            </div>
+                        ),
+                    },
+                    {
+                        title: "Step 3: Contact Email",
+                        content: (
+                            <div>
+                                <input type="email" name="email" placeholder="your-email@example.com" value={datePlan.email} onChange={handleInputChange} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30" required />
+                                <p className="text-xs text-textPrimary/60 mt-2">Required for date reminders.</p>
+                            </div>
+                        ),
+                    },
+                    {
+                        title: "Step 4: Location & Ideas",
+                        content: ( <textarea name="location" placeholder="e.g., Romantic restaurant, Hiking trail, Board game cafe" value={datePlan.location} onChange={handleInputChange} rows="4" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30" required></textarea> ),
+                    },
+                    {
+                        title: "Step 5: Additional Notes",
+                        content: ( <textarea name="notes" placeholder="e.g., Dress code, Reservations, Gift ideas" value={datePlan.notes} onChange={handleInputChange} rows="6" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-secondary focus:ring-2 focus:ring-secondary/30"></textarea> ),
+                    },
+                    {
+                        title: "Step 6: Review Your Plan",
+                        content: (
+                            <div className="space-y-3 text-textPrimary/80 bg-accent/30 p-6 rounded-lg">
+                                <p><strong>Date Name:</strong> <span className="text-primary">{datePlan.name || 'N/A'}</span></p>
+                                <p><strong>Date & Time:</strong> <span className="text-primary">{datePlan.date || 'N/A'} at {datePlan.time || 'N/A'}</span></p>
+                                <p><strong>Email for Reminder:</strong> <span className="text-primary">{datePlan.email || 'N/A'}</span></p>
+                                <p><strong>Location/Activity:</strong> <span className="text-primary">{datePlan.location || 'N/A'}</span></p>
+                                <p><strong>Notes:</strong> <span className="text-primary">{datePlan.notes || 'N/A'}</span></p>
+                            </div>
+                        ),
+                    },
+                ];
+
+                return (
+                    <div className="border border-accent rounded-xl p-6 sm:p-8 mb-8 bg-white">
+                        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-primary mb-6 text-center">{steps[currentStep].title}</h2>
+                        <div className="mb-6 min-h-[120px]">{steps[currentStep].content}</div>
+                        <div className="flex justify-between items-center mt-6">
+                            <button onClick={prevStep} disabled={currentStep === 0 || loading} className={`bg-accent text-primary font-semibold py-2 px-4 sm:px-5 rounded-button shadow-sm transition duration-300 text-sm sm:text-base ${currentStep === 0 || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-secondary/40'}`}>Previous</button>
+                            {currentStep < steps.length - 1 ? (
+                                <button onClick={nextStep} disabled={loading} className={`bg-secondary text-primary font-semibold py-2 px-4 sm:px-5 rounded-button shadow-md transition duration-300 text-sm sm:text-base ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90 transform hover:scale-105'}`}>Next</button>
+                            ) : (
+                                <button onClick={saveDatePlan} disabled={loading} className={`bg-primary text-white font-bold py-3 px-6 sm:px-8 rounded-button shadow-lg transition duration-300 text-sm sm:text-base ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90 transform hover:scale-105'}`}>
+                                    {loading ? 'Saving...' : (editingPlanId ? 'Update Plan' : 'Save Plan')} <i className="ri-heart-add-line ml-2"></i>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            const DateCollectionPage = ({ savedDatePlans, loading, editDatePlan, confirmFulfill }) => {
+                const plannedDates = savedDatePlans.filter(plan => plan.status === 'planned');
+                return (
+                    <div className="w-full bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 className="text-3xl font-serif font-bold text-primary mb-6 text-center">Our Planned Adventures</h2>
+                        {loading && <div className="text-center text-textPrimary">Loading plans...</div>}
+                        {!loading && plannedDates.length === 0 && <div className="text-center text-textPrimary/70 py-8 bg-accent/20 rounded-lg">No adventures planned yet. Let's create one!</div>}
+                        <div className="space-y-4">
+                            {plannedDates.map(plan => (
+                                <div key={plan.id} className="bg-white p-5 rounded-lg shadow-md border border-secondary/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                    <div className="flex-grow">
+                                        <h3 className="text-xl font-serif font-semibold text-primary">{plan.name || 'Unnamed Date'}</h3>
+                                        <p className="text-textPrimary/80 text-sm">{plan.date} at {plan.time} - {plan.location}</p>
+                                        {plan.email && <p className="text-textPrimary/60 text-xs mt-1"><i className="ri-mail-line align-bottom"></i> Reminder to: {plan.email}</p>}
+                                        {plan.notes && <p className="text-textPrimary/60 text-xs italic mt-1">Notes: {plan.notes}</p>}
+                                        {plan.timestamp && <p className="text-textPrimary/50 text-xs mt-1">Saved: {new Date(plan.timestamp).toLocaleString()}</p>}
+                                    </div>
+                                    <div className="flex gap-2 w-full md:w-auto flex-shrink-0">
+                                        <button onClick={() => editDatePlan(plan)} className="bg-secondary text-primary py-2 px-4 rounded-button shadow-md hover:bg-opacity-80 transition duration-300 flex-grow md:flex-grow-0 justify-center"><i className="ri-pencil-line"></i></button>
+                                        <button onClick={() => confirmFulfill(plan.id)} className="bg-lovePink text-white py-2 px-4 rounded-button shadow-md hover:bg-opacity-80 transition duration-300 flex-grow md:flex-grow-0 justify-center"><i className="ri-check-double-line"></i> Fulfilled</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            };
+
+            const MemoriesPage = ({ savedDatePlans, loading }) => {
+                const fulfilledDates = savedDatePlans.filter(plan => plan.status === 'fulfilled');
+                return (
+                    <div className="w-full bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                        <h2 className="text-3xl font-serif font-bold text-primary mb-6 text-center">Our Cherished Memories</h2>
+                        {loading && <div className="text-center text-textPrimary">Loading memories...</div>}
+                        {!loading && fulfilledDates.length === 0 && <div className="text-center text-textPrimary/70 py-8 bg-accent/20 rounded-lg">Fulfill a planned date to create a memory here.</div>}
+                        <div className="space-y-4">
+                            {fulfilledDates.map(plan => (
+                                <div key={plan.id} className="bg-accent/30 p-5 rounded-lg shadow-sm border border-lovePink/30 flex flex-col md:flex-row justify-between items-start md:items-center">
+                                    <div className="flex-grow">
+                                        <h3 className="text-xl font-serif font-semibold text-primary">{plan.name || 'Unnamed Date'}</h3>
+                                        <p className="text-textPrimary/80 text-sm">{plan.date} at {plan.time} - {plan.location}</p>
+                                        {plan.timestamp && <p className="text-textPrimary/50 text-xs mt-1">Fulfilled: {new Date(plan.timestamp).toLocaleString()}</p>}
+                                    </div>
+                                    <i className="ri-heart-fill text-lovePink text-2xl flex-shrink-0 mt-4 md:mt-0"></i>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            };
+
+            const App = () => {
+                const [currentStep, setCurrentStep] = useState(0);
+                const [datePlan, setDatePlan] = useState({ id: null, name: '', date: '', time: '', email: '', location: '', notes: '', status: 'planned', timestamp: null });
+                const [savedDatePlans, setSavedDatePlans] = useState(() => {
+                    const savedPlans = localStorage.getItem('coupleDatePlans');
+                    return savedPlans ? JSON.parse(savedPlans) : [];
+                });
+                const [loading, setLoading] = useState(false);
+                const [message, setMessage] = useState('');
+                const [showConfirmModal, setShowConfirmModal] = useState(false);
+                const [planToFulfillId, setPlanToFulfillId] = useState(null);
+                const [editingPlanId, setEditingPlanId] = useState(null);
+                const [currentPage, setCurrentPage] = useState('planner');
+
+                useEffect(() => { localStorage.setItem('coupleDatePlans', JSON.stringify(savedDatePlans)); }, [savedDatePlans]);
+
+                const saveDatePlan = () => {
+                    if (!datePlan.name.trim() || !datePlan.date.trim() || !datePlan.time.trim() || !datePlan.email.trim() || !datePlan.location.trim()) {
+                        setMessage("Please fill in all required fields: name, date, time, email, and location."); return;
+                    }
+                    setLoading(true); setMessage('');
+                    
+                    fetch("{{ url_for('views.send_date_plan_email') }}", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(datePlan)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const planToSave = { ...datePlan, timestamp: new Date().toISOString() };
+                        let successMessage = '';
+                        if (editingPlanId) {
+                            setSavedDatePlans(prev => prev.map(p => (p.id === editingPlanId ? { ...planToSave, id: editingPlanId } : p)));
+                            successMessage = data.status === 'success' ? "Adventure updated and confirmation sent!" : "Adventure updated (email failed to send).";
+                        } else {
+                            setSavedDatePlans(prev => [{ ...planToSave, id: Date.now() }, ...prev]);
+                            successMessage = data.status === 'success' ? "New adventure saved and confirmation sent!" : "Adventure saved (email failed to send).";
+                        }
+                        setMessage(successMessage);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        const planToSave = { ...datePlan, timestamp: new Date().toISOString() };
+                         if (editingPlanId) {
+                            setSavedDatePlans(prev => prev.map(p => (p.id === editingPlanId ? { ...planToSave, id: editingPlanId } : p)));
+                            setMessage("Adventure updated, but couldn't send email due to a network error.");
+                        } else {
+                            setSavedDatePlans(prev => [{ ...planToSave, id: Date.now() }, ...prev]);
+                            setMessage("Adventure saved, but couldn't send email due to a network error.");
+                        }
+                    })
+                    .finally(() => {
+                        setTimeout(() => { 
+                            resetForm(); 
+                            setLoading(false); 
+                        }, 1500);
+                    });
+                };
+
+                const resetForm = () => {
+                    setDatePlan({ id: null, name: '', date: '', time: '', email: '', location: '', notes: '', status: 'planned', timestamp: null });
+                    setCurrentStep(0); setEditingPlanId(null);
+                };
+
+                const editDatePlan = (plan) => {
+                    setDatePlan(plan); setEditingPlanId(plan.id);
+                    setCurrentStep(0); setMessage(''); setCurrentPage('planner');
+                };
+
+                const confirmFulfill = (planId) => {
+                    setPlanToFulfillId(planId); setShowConfirmModal(true);
+                };
+
+                const handleFulfill = () => {
+                    if (!planToFulfillId) return;
+                    setLoading(true); setMessage('');
+                    setSavedDatePlans(prev => prev.map(plan => plan.id === planToFulfillId ? { ...plan, status: 'fulfilled' } : plan));
+                    setTimeout(() => { setMessage("Date marked as a cherished memory!"); setLoading(false); setShowConfirmModal(false); setPlanToFulfillId(null); }, 500);
+                };
+
+                return (
+                    <div className="min-h-screen p-4 sm:p-8">
+                        <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8">
+                            <header className="text-center mb-8">
+                                <h1 className="text-4xl sm:text-5xl font-serif font-extrabold text-primary">Couple's Date Planner</h1>
+                                <p className="text-textPrimary/80 mt-2">Let's plan our next beautiful moment together.</p>
+                            </header>
+
+                            {message && <div className={`p-4 mb-6 text-center rounded-lg transition-opacity duration-300 bg-secondary/20 text-primary font-medium`}>{message}</div>}
+
+                            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-8">
+                                <button onClick={() => { setCurrentPage('planner'); resetForm(); setMessage(''); }} className={`py-3 px-4 sm:px-6 w-full sm:w-auto rounded-button font-semibold transition duration-300 text-base ${currentPage === 'planner' ? 'bg-primary text-white shadow-lg' : 'bg-accent text-primary hover:bg-secondary/40'}`}>Plan a Date</button>
+                                <button onClick={() => { setCurrentPage('collection'); setMessage(''); }} className={`py-3 px-4 sm:px-6 w-full sm:w-auto rounded-button font-semibold transition duration-300 text-base ${currentPage === 'collection' ? 'bg-primary text-white shadow-lg' : 'bg-accent text-primary hover:bg-secondary/40'}`}>Planned Adventures</button>
+                                <button onClick={() => { setCurrentPage('memories'); setMessage(''); }} className={`py-3 px-4 sm:px-6 w-full sm:w-auto rounded-button font-semibold transition duration-300 text-base ${currentPage === 'memories' ? 'bg-primary text-white shadow-lg' : 'bg-accent text-primary hover:bg-secondary/40'}`}>Our Memories</button>
+                            </div>
+
+                            {currentPage === 'planner' ? <DatePlannerPage datePlan={datePlan} setDatePlan={setDatePlan} currentStep={currentStep} setCurrentStep={setCurrentStep} message={message} setMessage={setMessage} loading={loading} saveDatePlan={saveDatePlan} resetForm={resetForm} editingPlanId={editingPlanId} />
+                            : currentPage === 'collection' ? <DateCollectionPage savedDatePlans={savedDatePlans} loading={loading} editDatePlan={editDatePlan} confirmFulfill={confirmFulfill} />
+                            : <MemoriesPage savedDatePlans={savedDatePlans} loading={loading} />}
+                        </div>
+
+                        {showConfirmModal && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[999]">
+                                <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
+                                    <h3 className="text-xl font-serif font-semibold text-primary mb-4">Confirm Your Memory</h3>
+                                    <p className="text-textPrimary/80 mb-6">Mark this date as fulfilled and add it to your collection of memories?</p>
+                                    <div className="flex flex-col sm:flex-row gap-3 justify-center sm:space-x-4">
+                                        <button onClick={() => setShowConfirmModal(false)} className="bg-accent text-primary py-2 px-5 rounded-button hover:bg-secondary/40 transition duration-300 w-full sm:w-auto">Cancel</button>
+                                        <button onClick={handleFulfill} className="bg-primary text-white py-2 px-5 rounded-button hover:bg-opacity-90 transition duration-300 w-full sm:w-auto">Yes, it was lovely!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            return App;
+        })();
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(React.createElement(App));
+    </script>
+    
+    <!-- General Site Scripts from index.html -->
+    <script id="general-scripts">
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if(header) header.classList.toggle('header-scrolled', window.scrollY > 50);
+        });
+
+        const backToTopButton = document.getElementById('back-to-top');
+        if (backToTopButton) {
+            window.addEventListener('scroll', () => {
+                backToTopButton.classList.toggle('opacity-0', window.scrollY <= 300);
+                backToTopButton.classList.toggle('invisible', window.scrollY <= 300);
+            });
+            backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && cursorDot && cursorOutline) {
+            let mouseX = 0, mouseY = 0, outlineX = 0, outlineY = 0;
+            window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+            
+            const animateCursor = () => {
+                cursorDot.style.left = `${mouseX}px`;
+                cursorDot.style.top = `${mouseY}px`;
+                const speed = 0.15;
+                outlineX += (mouseX - outlineX) * speed;
+                outlineY += (mouseY - outlineY) * speed;
+                cursorOutline.style.left = `${outlineX}px`;
+                cursorOutline.style.top = `${outlineY}px`;
+                requestAnimationFrame(animateCursor);
+            };
+            requestAnimationFrame(animateCursor);
+            
+            document.querySelectorAll('a, button, input, textarea, select, [role="button"]').forEach(el => {
+                el.addEventListener('mouseenter', () => cursorOutline.classList.add('grow'));
+                el.addEventListener('mouseleave', () => cursorOutline.classList.remove('grow'));
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>
