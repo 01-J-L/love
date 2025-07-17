@@ -236,11 +236,14 @@
         /* --- Blog-style Memories Section --- */
         #page-our-memories .memory-articles {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 2rem;
         }
         .article-card {
             text-align: center;
+            /* MODIFIED: Made the card smaller */
+            max-width: 350px;
+            margin: 0 auto;
         }
         .article-card img {
             width: 100%;
@@ -274,16 +277,18 @@
             display: flex;
             gap: 2rem;
             margin-top: 2rem;
+            align-items: flex-start;
         }
         .full-article-content .ticket-stubs {
-            flex-basis: 30%;
+            flex-basis: 280px;
+            flex-shrink: 0;
         }
         .full-article-content .article-text {
-            flex-basis: 70%;
+            flex: 1;
             font-size: 1.1rem;
             line-height: 1.8;
         }
-        .ticket-stubs img {
+        .ticket-stubs img, .ticket-stubs video {
             width: 100%;
             margin-bottom: 1rem;
             filter: drop-shadow(2px 2px 5px var(--shadow-color));
@@ -333,10 +338,10 @@
 
     <div class="page-container">
         <header>
-            <h1 class="script-font">Happy Valentine's, my wiss</h1>
+            <h1 class="script-font">Happy Birthday, my love</h1>
             <p class="subtitle serif-font">hope today gives you a reason to smile!</p>
-            <h2 class="script-font amour">Amour
-                <span class="from-name">by your dd</span>
+            <h2 class="script-font amour">Cutiemels
+                <span class="from-name">by your J.L.</span>
             </h2>
         </header>
 
@@ -353,10 +358,10 @@
             <!-- Home Page Content -->
             <section id="page-home" class="page">
                 <div class="photo-strip">
-                    <img src="https://readdy.ai/api/search-image?query=red%20theater%20curtain%20opening%20to%20a%20glowing%20heart&width=300&height=300&seq=vday1" alt="Heart Curtain">
-                    <img src="https://readdy.ai/api/search-image?query=vintage%20be%20my%20valentine%20card%20with%20cherubs&width=300&height=300&seq=vday2" alt="Be My Valentine Card">
-                    <img src="https://readdy.ai/api/search-image?query=cute%20couple%20posing%20in%20a%20photobooth%2C%20vintage%20style&width=300&height=300&seq=vday3" alt="Couple Photobooth">
-                    <img src="https://readdy.ai/api/search-image?query=box%20of%20ferrero%20rocher%20chocolates%20and%20roses&width=300&height=300&seq=vday4" alt="Chocolates">
+                    <img src="{{ url_for('static', filename='image/mels4.jpg') }}" alt="Heart Curtain">
+                    <img src="{{ url_for('static', filename='image/me.jpg') }}" alt="Be My Valentine Card">
+                    <img src="{{ url_for('static', filename='image/mels5.jpg') }}" alt="Couple Photobooth">
+                    <img src="{{ url_for('static', filename='image/me2.jpg') }}" alt="Chocolates">
                 </div>
                  <p class="serif-font" style="text-align:center; margin-top: 3rem; font-size: 1.2rem; color: #a0988f;">Click a link above to explore our story...</p>
             </section>
@@ -364,14 +369,14 @@
             <!-- Calendar Page Content -->
             <section id="page-calendar" class="page">
                 <a class="back-to-menu-btn">Back to Menu</a>
-                <h2 class="section-title">A Calendar of Us</h2>
+                <h2 class="section-title">A Calendar of you</h2>
                 <div class="collage">
-                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=colorful%20inspirational%20sticker%20saying%20What%20If%20It%20All%20Works%20Out%3F&width=400&height=400&seq=cal1" alt="Sticker quote"></div>
+                    <div class="collage-item"><img src="{{ url_for('static', filename='image/mels&.jpg') }}" alt="Sticker quote"></div>
                     <div class="collage-item text-note serif-font">
-                        This calendar is our record of sharing good things together! 🩷
+                        This calendar is your record of sharing how beautiful you are! of course i can't input all of it because you are a infinity pretty 🩷
                     </div>
-                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=vintage%20style%20poster%20for%20Valentines%20day&width=400&height=600&seq=cal2" alt="Valentines Poster"></div>
-                    <div class="collage-item"><img src="https://readdy.ai/api/search-image?query=two%20of%20hearts%20playing%20card%2C%20vintage%20style&width=400&height=500&seq=cal3" alt="Playing Card"></div>
+                    <div class="collage-item"><img src="{{ url_for('static', filename='image/mels&2.jpg') }}" alt="Valentines Poster"></div>
+                    <div class="collage-item"><img src="{{ url_for('static', filename='image/mels&3.jpg') }}" alt="Playing Card"></div>
                 </div>
             </section>
             
@@ -380,14 +385,14 @@
                 <a class="back-to-menu-btn">Back to Menu</a>
                 <h2 class="section-title">Noted to You</h2>
                 <div class="photo-strip">
-                     <img src="https://readdy.ai/api/search-image?query=man%27s%20hands%20forming%20a%20heart%20shape%2C%20warm%20lighting&width=400&height=400&seq=note1" alt="Hands forming a heart">
-                     <img src="https://readdy.ai/api/search-image?query=two%20people%27s%20hands%20coming%20together%20to%20form%20a%20heart%20shape&width=400&height=400&seq=note2" alt="Two hands heart">
-                     <img src="https://readdy.ai/api/search-image?query=man%20winking%20and%20smiling%20at%20the%20camera&width=400&height=400&seq=note3" alt="Man smiling">
+                     <img src="{{ url_for('static', filename='image/mels1.jpg') }}" alt="Hands forming a heart">
+                     <img src="{{ url_for('static', filename='image/mels2.jpg') }}" alt="Two hands heart">
+                     <img src="{{ url_for('static', filename='image/mels3.jpg') }}" alt="Man smiling">
                 </div>
                 <div class="letter-content" style="margin-top: 3rem;">
                     <div class="letter-quote">"This is the sweetest letter you've ever read"</div>
                     <div class="letter-text serif-font">
-                        <p>Happy Valentine's Day, my Wiss. Even though we don't say "I love you," we show it in a thousand different ways. My heart does a little flip every time when I think about it, over the past 1 year and 2 months... It feels like a dream. Our journey hasn't been easy, we've been through both good and bad-looking times, and we've celebrated so many firsts that sometimes it's hard to keep track of it all. We've reminded each other to live in the present, but let's be honest, those memories are too precious to forget. I'm saving the letters we'll write to each other so we can look back on them when we're older. Thank you for your endless support, even when I'm a mess. This Valentine's Day is another special one for me because I have you. Future, this Valentine's Day is for you.</p>
+                        <p>Happy birthday, my Love. I always gonna say I love you, and we show it in a thousand different ways. My heart does a little flip every time when I think about you, over the several months and weeks... It feels like a dream. Our journey will not be easy, even we've been through both good and bad-looking times we will still have good conversation and  leaning on God to deepen and strengthen our relationship, and we've will celebrate many firsts that sometimes it's hard to keep track of it all. We've reminded each other to live in the present, but let's be honest, those memories are too precious to forget. I'm saving the letters we'll write to each other so we can look back on them when we're older. Thank you for your endless support and love, even when we are mess we will be stonger. This Birthday celebration is another special one for me because its about you. And i like to meet your parents on your birthday to ask approval to court you as a sign of respect to them and also for you and to show love on how deeply serious i'm for you, about us, again i love you cutiemels. Future, This Birthday is for you, My Love.</p>
                     </div>
                 </div>
             </section>
@@ -397,14 +402,14 @@
                 <a class="back-to-menu-btn">Back to Menu</a>
                 <h2 class="section-title">The memories we made together, if I hadn't kept the photos,<br>we probably wouldn't remember them</h2>
                 <div class="photo-grid">
-                    <img src="https://readdy.ai/api/search-image?query=casual%20photo%20of%20a%20young%20couple%20laughing%20on%20a%20sofa&width=300&height=200&seq=mem1" alt="Memory 1">
-                    <img src="https://readdy.ai/api/search-image?query=selfie%20of%20a%20man%20smiling%2C%20playful%20expression&width=300&height=200&seq=mem2" alt="Memory 2">
-                    <img src="https://readdy.ai/api/search-image?query=couple%20taking%20a%20mirror%20selfie%20together&width=300&height=200&seq=mem3" alt="Memory 3">
-                    <img src="https://readdy.ai/api/search-image?query=photo%20of%20a%20woman%20smiling%20brightly&width=300&height=200&seq=mem4" alt="Memory 4">
-                    <img src="https://readdy.ai/api/search-image?query=couple%20cuddling%20on%20a%20bed%2C%20cozy%20and%20intimate&width=300&height=200&seq=mem5" alt="Memory 5">
-                    <img src="https://readdy.ai/api/search-image?query=young%20man%20looking%20thoughtful&width=300&height=200&seq=mem6" alt="Memory 6">
-                    <img src="https://readdy.ai/api/search-image?query=woman%20laughing%20with%20eyes%20closed&width=300&height=200&seq=mem7" alt="Memory 7">
-                    <img src="https://readdy.ai/api/search-image?query=couple%20making%20silly%20faces%20at%20the%20camera&width=300&height=200&seq=mem8" alt="Memory 8">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 1">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 2">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 3">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 4">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 5">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 6">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 7">
+                    <img src="{{ url_for('static', filename='image/soon.jpg') }}" alt="Memory 8">
                 </div>
             </section>
             
@@ -413,9 +418,12 @@
                 <a class="back-to-menu-btn">Back to Menu</a>
                 <h2 class="section-title">This is the message I've chosen because it's my favorite,<br>and there were quite a few to choose from!</h2>
                 <div class="message-grid">
-                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20romantic%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg1" alt="Favorite Message 1">
-                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20loving%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg2" alt="Favorite Message 2">
-                    <img src="https://readdy.ai/api/search-image?query=screenshot%20of%20a%20sweet%20text%20message%20conversation%20with%20purple%20bubbles&width=300&height=500&seq=msg3" alt="Favorite Message 3">
+                    <img src="{{ url_for('static', filename='image/mes1.jpg') }}" alt="Favorite Message 1">
+                    <img src="{{ url_for('static', filename='image/mes2.jpg') }}" alt="Favorite Message 2">
+                    <img src="{{ url_for('static', filename='image/mes3.jpg') }}" alt="Favorite Message 3">
+                    <img src="{{ url_for('static', filename='image/mes4.jpg') }}" alt="Favorite Message 4">
+                    <img src="{{ url_for('static', filename='image/mes5.jpg') }}" alt="Favorite Message 5">
+                    <img src="{{ url_for('static', filename='image/mes6.jpg') }}" alt="Favorite Message 6">
                 </div>
             </section>
             
@@ -424,28 +432,26 @@
                 <a class="back-to-menu-btn">Back to Menu</a>
                 <h2 class="section-title">Our Memories<br><small style="font-size: 1.2rem; color: #a0988f;">The memories that are important to me, the ones we created together :)</small></h2>
                 <div class="memory-articles">
+                    
                     <div class="article-card">
-                        <img src="https://readdy.ai/api/search-image?query=bouquet%20of%20lego%20flowers%20in%20a%20dark%20room&width=400&height=500&seq=blog1" alt="Valentine's day gift">
-                        <h3>Valentine's Day 202x !!</h3>
-                    </div>
-                    <div class="article-card">
-                        <img src="https://readdy.ai/api/search-image?query=beautiful%20homemade%20birthday%20cake%20with%20berries%20on%20top&width=400&height=500&seq=blog2" alt="Birthday Cake">
-                        <h3>Wissel's birthday</h3>
+                        <img src="{{ url_for('static', filename='image/melsaqua.jpg') }}" alt="Birthday Cake">
+                        <h3>Aquantance Party</h3>
                     </div>
                 </div>
 
                 <div class="full-article">
-                    <h2 class="script-font">Happy Valentine's Day</h2>
+                    <h2 class="script-font">Happy Birthday</h2>
                     <div class="full-article-content">
                         <div class="ticket-stubs">
-                           <img src="https://readdy.ai/api/search-image?query=pink%20and%20red%20ticket%20stub%20with%20text%20'LOVE%20WISSEL%20DAY'&width=500&height=200&seq=ticket1" alt="Love Wissel Day Ticket">
-                           <img src="https://readdy.ai/api/search-image?query=blue%20and%20purple%20ticket%20stub%20with%20text%20'DO%20ANYTHING'&width=500&height=200&seq=ticket2" alt="Do Anything Ticket">
-                           <img src="https://readdy.ai/api/search-image?query=red%20and%20gold%20ticket%20stub%20with%20text%20'SPECIAL%20MOVIE%20PREMIERE'&width=500&height=200&seq=ticket3" alt="Movie Premiere Ticket">
+                           <video width="100%" controls loop muted style="border-radius: 5px;">
+                               <source src="{{ url_for('static', filename='video/aquantance.mp4') }}" type="video/mp4">
+                               Your browser does not support the video tag.
+                           </video>
                         </div>
                         <div class="article-text serif-font">
-                            <p>Valentine's Day 2024 was so funny! At first, you told me that you didn't want anything. I kept asking what you wanted, but you never said what it could be. When the package arrived, it turned out to be what I wanted, a LEGO flower set. You said you didn't know what to get me, so you just got something for yourself that I also happened to really want. Honestly, I was so happy. And I made you a coupon, but you never used it, so now I get to keep it for myself, haha. Next time, just tell me what you want, don't get it for me and say it's for you!</p>
-                            <p>The funniest part was the next day when I sent you a LEGO flower set too! I told you I already knew what you wanted, because it was what I truly wanted. So, you ended up buying me the LEGO flowers, and I got a set for you. It was like we were on the same wavelength without even talking.</p>
-                            <p>Thank you, Wissel. This was my favorite Valentine's Day ever!</p>
+                            <p>Happy Birthday, my cutieMels. At first, I didn’t know how to approach you—because in my eyes, you were someone so beautiful, so talented, so smart, and incredibly kind. Honestly, nasayo na ang lahat. I gathered the courage to ask you for a dance and confess my feelings, even though I was shy and nervous. But in that moment, I decided to take the chance and I’m so glad I did. Thank you for being you. I’m beyond lucky to have you my Love</p>
+                           
+                            <p>Thank you, My Love. i really really Love you</p>
                         </div>
                     </div>
                 </div>
@@ -486,9 +492,6 @@
                     activeLink.classList.add('active');
                 }
                 
-                // --- THIS BLOCK WAS REMOVED ---
-                // The button will now be visible by default and this script
-                // will no longer hide it.
             }
 
             // Add click listeners to navigation links
