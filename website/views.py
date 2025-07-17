@@ -1,5 +1,4 @@
 
-
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify, current_app
 from flask_mail import Message
 from . import mail
@@ -118,3 +117,54 @@ def send_date_plan_email():
     except Exception as e:
         print(f"Error sending email: {e}") # For debugging on the server
         return jsonify({'status': 'error', 'message': 'Failed to send email.'}), 500
+
+@views.route('/send-contact-email', methods=['POST'])
+def send_contact_email():
+    if not session.get('unlocked'):
+        return jsonify({'status': 'error', 'message': 'Not authorized'}), 401
+
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    message_body = data.get('message')
+
+    if not all([name, email, message_body]):
+        return jsonify({'status': 'error', 'message': 'Please fill out all fields.'}), 400
+    
+    # Send email to the site administrator/owner
+    admin_email = current_app.config['MAIL_USERNAME']
+    
+    # Simple HTML structure for the email
+    html_content = f"""
+    <html>
+        <body style="font-family: sans-serif; padding: 20px;">
+            <h2 style="color: #A7414A;">New Contact Form Submission</h2>
+            <p>You have received a new message from the contact form on your website.</p>
+            <hr>
+            <p><strong>From:</strong> {name}</p>
+            <p><strong>Email:</strong> <a href="mailto:{email}">{email}</a></p>
+            <h3>Message:</h3>
+            <p style="padding: 15px; border-left: 3px solid #E0C56E; background-color: #f9f9f9;">
+                {message_body.replace(chr(10), '<br>')}
+            </p>
+            <hr>
+            <p><small>This is an automated message from the J.L. & Mels website.</small></p>
+        </body>
+    </html>
+    """
+
+    try:
+        msg = Message(
+            subject=f"New Website Message from {name}",
+            recipients=[admin_email],
+            reply_to=email,  # Set the user's email as the reply-to address for easy response
+            html=html_content
+        )
+        
+        mail.send(msg)
+        
+        return jsonify({'status': 'success', 'message': 'Thank you! Your message has been sent.'})
+
+    except Exception as e:
+        print(f"Error sending contact email: {e}") # For debugging on the server
+        return jsonify({'status': 'error', 'message': 'Failed to send message. Please try again later.'}), 500

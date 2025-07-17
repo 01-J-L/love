@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -233,7 +231,7 @@
                 );
             };
 
-            const MemoriesPage = ({ savedDatePlans, loading }) => {
+            const MemoriesPage = ({ savedDatePlans, loading, confirmDelete }) => {
                 const fulfilledDates = savedDatePlans.filter(plan => plan.status === 'fulfilled');
                 return (
                     <div className="w-full bg-white rounded-xl shadow-lg p-6 sm:p-8">
@@ -242,13 +240,18 @@
                         {!loading && fulfilledDates.length === 0 && <div className="text-center text-textPrimary/70 py-8 bg-accent/20 rounded-lg">Fulfill a planned date to create a memory here.</div>}
                         <div className="space-y-4">
                             {fulfilledDates.map(plan => (
-                                <div key={plan.id} className="bg-accent/30 p-5 rounded-lg shadow-sm border border-lovePink/30 flex flex-col md:flex-row justify-between items-start md:items-center">
+                                <div key={plan.id} className="bg-accent/30 p-5 rounded-lg shadow-sm border border-lovePink/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                     <div className="flex-grow">
                                         <h3 className="text-xl font-serif font-semibold text-primary">{plan.name || 'Unnamed Date'}</h3>
                                         <p className="text-textPrimary/80 text-sm">{plan.date} at {plan.time} - {plan.location}</p>
                                         {plan.timestamp && <p className="text-textPrimary/50 text-xs mt-1">Fulfilled: {new Date(plan.timestamp).toLocaleString()}</p>}
                                     </div>
-                                    <i className="ri-heart-fill text-lovePink text-2xl flex-shrink-0 mt-4 md:mt-0"></i>
+                                    <div className="flex items-center gap-3 flex-shrink-0 mt-4 md:mt-0">
+                                        <i className="ri-heart-fill text-lovePink text-2xl"></i>
+                                        <button onClick={() => confirmDelete(plan.id)} className="text-textPrimary/60 hover:text-primary transition duration-300" aria-label="Delete memory">
+                                             <i className="ri-delete-bin-line text-xl"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -267,6 +270,8 @@
                 const [message, setMessage] = useState('');
                 const [showConfirmModal, setShowConfirmModal] = useState(false);
                 const [planToFulfillId, setPlanToFulfillId] = useState(null);
+                const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+                const [planToDeleteId, setPlanToDeleteId] = useState(null);
                 const [editingPlanId, setEditingPlanId] = useState(null);
                 const [currentPage, setCurrentPage] = useState('planner');
 
@@ -336,6 +341,21 @@
                     setTimeout(() => { setMessage("Date marked as a cherished memory!"); setLoading(false); setShowConfirmModal(false); setPlanToFulfillId(null); }, 500);
                 };
 
+                const confirmDelete = (planId) => {
+                    setMessage('');
+                    setPlanToDeleteId(planId);
+                    setShowDeleteConfirmModal(true);
+                };
+
+                const handleDelete = () => {
+                    if (!planToDeleteId) return;
+                    setSavedDatePlans(prev => prev.filter(plan => plan.id !== planToDeleteId));
+                    setShowDeleteConfirmModal(false);
+                    setPlanToDeleteId(null);
+                    setMessage("Memory permanently deleted.");
+                    setTimeout(() => setMessage(''), 3000);
+                };
+
                 return (
                     <div className="min-h-screen p-4 sm:p-8">
                         <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8">
@@ -354,7 +374,7 @@
 
                             {currentPage === 'planner' ? <DatePlannerPage datePlan={datePlan} setDatePlan={setDatePlan} currentStep={currentStep} setCurrentStep={setCurrentStep} message={message} setMessage={setMessage} loading={loading} saveDatePlan={saveDatePlan} resetForm={resetForm} editingPlanId={editingPlanId} />
                             : currentPage === 'collection' ? <DateCollectionPage savedDatePlans={savedDatePlans} loading={loading} editDatePlan={editDatePlan} confirmFulfill={confirmFulfill} />
-                            : <MemoriesPage savedDatePlans={savedDatePlans} loading={loading} />}
+                            : <MemoriesPage savedDatePlans={savedDatePlans} loading={loading} confirmDelete={confirmDelete} />}
                         </div>
 
                         {showConfirmModal && (
@@ -365,6 +385,19 @@
                                     <div className="flex flex-col sm:flex-row gap-3 justify-center sm:space-x-4">
                                         <button onClick={() => setShowConfirmModal(false)} className="bg-accent text-primary py-2 px-5 rounded-button hover:bg-secondary/40 transition duration-300 w-full sm:w-auto">Cancel</button>
                                         <button onClick={handleFulfill} className="bg-primary text-white py-2 px-5 rounded-button hover:bg-opacity-90 transition duration-300 w-full sm:w-auto">Yes, it was lovely!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {showDeleteConfirmModal && (
+                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[999]">
+                                <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
+                                    <h3 className="text-xl font-serif font-semibold text-primary mb-4">Are you sure?</h3>
+                                    <p className="text-textPrimary/80 mb-6">This will permanently delete this cherished memory. This action cannot be undone.</p>
+                                    <div className="flex flex-col sm:flex-row gap-3 justify-center sm:space-x-4">
+                                        <button onClick={() => setShowDeleteConfirmModal(false)} className="bg-accent text-primary py-2 px-5 rounded-button hover:bg-secondary/40 transition duration-300 w-full sm:w-auto">Cancel</button>
+                                        <button onClick={handleDelete} className="bg-red-600 text-white py-2 px-5 rounded-button hover:bg-red-700 transition duration-300 w-full sm:w-auto">Yes, delete it</button>
                                     </div>
                                 </div>
                             </div>
