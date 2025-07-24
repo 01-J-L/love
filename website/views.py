@@ -4,78 +4,91 @@ from . import mail
 
 views = Blueprint('views', __name__)
 
+# The new entry point. It serves the lock screen and handles login.
 @views.route('/', methods=['GET', 'POST'])
-def home():
-    # Handle POST request for unlocking
+def lock():
+    # If the user is already unlocked and visits the root URL, redirect them to the home page.
+    if request.method == 'GET' and session.get('unlocked'):
+        return redirect(url_for('views.home'))
+
+    # Handle the form submission for unlocking
     if request.method == 'POST':
         entered_code = request.form.get('password')
         secret_code = "06282025" 
         
         if entered_code == secret_code:
             session['unlocked'] = True
-            session.permanent = False  # Make the session non-permanent (expires on browser close)
-            # Redirect to the same URL but as a GET request to show the homepage
+            session.permanent = False  # Session expires on browser close
+            # On successful unlock, redirect to the main home page
             return redirect(url_for('views.home'))
         else:
             error = "Oops! Wrong code you silly 😊, try again my love."
-            # On failure, re-render the lock screen with an error
+            # On failure, re-render the lock screen with an error message
             return render_template("lock_screen.html", error=error)
 
-    # Handle GET request
-    if session.get('unlocked'):
-        # If session is unlocked, show the main page
-        return render_template("index.html")
-    else:
-        # If session is not unlocked, show the lock screen
-        return render_template("lock_screen.html", error=None)
+    # For a GET request from a locked-out user, show the lock screen.
+    return render_template("lock_screen.html", error=None)
+
+# The new, protected home page route that serves the main content.
+@views.route('/home')
+def home():
+    # If the session is not unlocked, redirect to the lock screen.
+    if not session.get('unlocked'):
+        return redirect(url_for('views.lock'))
+    
+    # If the session is unlocked, show the main index page.
+    return render_template("index.html")
+
+# --- Update all other routes to redirect to 'views.lock' if unauthenticated ---
 
 @views.route('/love-puzzle')
 def love_puzzle():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("puzzle.html")
 
 @views.route('/letters')
 def letters():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("letters.html")
 
 @views.route('/music')
 def music_player():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("music_player.html")
 
 @views.route('/flower-entry')
 def flower_entry():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("flower_entry.html")
 
 @views.route('/flower-display')
 def flower_display():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("flower.html")
 
 @views.route('/our-memories')
 def our_memories():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("memories.html")
 
 @views.route('/plan-a-date')
 def date_planner():
     if not session.get('unlocked'):
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.lock'))
     return render_template("plan.html")
 
 
+# The session reset now redirects to the new lock screen at '/'
 @views.route('/reset')
 def reset_session():
     session.pop('unlocked', None)
-    return redirect(url_for('views.home'))
+    return redirect(url_for('views.lock'))
 
 @views.route('/send-date-plan-email', methods=['POST'])
 def send_date_plan_email():
