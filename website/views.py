@@ -13,6 +13,7 @@ def home():
         
         if entered_code == secret_code:
             session['unlocked'] = True
+            session.permanent = False  # Make the session non-permanent (expires on browser close)
             # Redirect to the same URL but as a GET request to show the homepage
             return redirect(url_for('views.home'))
         else:

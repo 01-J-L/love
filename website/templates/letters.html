@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E🌸%3C%2Ftext%3E%3C%2Fsvg%3E" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -166,7 +167,6 @@
         .tag-career { background-color: var(--tag-career-bg); color: var(--tag-career-text); }
         .tag-you { background-color: var(--tag-you-bg); color: var(--tag-you-text); }
         
-        /* --- ADDED: Home Button Styles --- */
         .home-button {
             position: fixed;
             bottom: 30px;
@@ -198,13 +198,89 @@
             transition: color 0.2s ease-in-out;
         }
 
+        /* --- ADDED: Mini Player Styles --- */
+        #mini-player {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: rgba(49, 42, 42, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateX(-150%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+            pointer-events: none;
+        }
+        #mini-player.visible {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #mini-player-art {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            object-fit: cover;
+        }
+        #mini-player-info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+        #mini-player-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+        #mini-player-artist {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+        .mini-player-btn {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #dbe4f3;
+            transition: background-color 0.2s ease;
+        }
+        .mini-player-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .mini-player-btn.close-btn {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .mini-player-btn.close-btn:hover {
+            color: white;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="container">
        
-
         <header class="page-header">
             <div class="header-from">FROM J.L.</div>
             <div class="header-title">
@@ -285,12 +361,26 @@
         </div>
     </div>
 
-    <!-- ADDED: Home Button -->
     <a href="{{ url_for('views.home') }}" class="home-button" title="Back to Home">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"></path>
         </svg>
     </a>
+    
+    <!-- ADDED: Mini Player HTML -->
+    <div id="mini-player">
+        <img id="mini-player-art" src="" alt="Album Art">
+        <div id="mini-player-info">
+            <p id="mini-player-title">Song Title</p>
+            <p id="mini-player-artist">Artist</p>
+        </div>
+        <button id="mini-player-play-pause" class="mini-player-btn" aria-label="Play/Pause">
+            <i class="ri-play-fill ri-lg"></i>
+        </button>
+        <button id="mini-player-close" class="mini-player-btn close-btn" aria-label="Close Player">
+            <i class="ri-close-line ri-lg"></i>
+        </button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -298,37 +388,97 @@
             const letterCards = document.querySelectorAll('.letter-card');
             
             filterContainer.addEventListener('click', (e) => {
-                if (!e.target.matches('.filter-btn')) {
-                    return;
-                }
+                if (!e.target.matches('.filter-btn')) return;
 
                 const clickedButton = e.target;
                 const filter = clickedButton.dataset.filter;
                 
-                // If the clicked button is already active, deactivate it and show all.
                 if (clickedButton.classList.contains('active')) {
                     clickedButton.classList.remove('active');
-                    // Show all cards
-                    letterCards.forEach(card => {
-                        card.style.display = 'flex'; // Use the original display value
-                    });
+                    letterCards.forEach(card => card.style.display = 'flex');
                     return;
                 }
                 
-                // Remove active class from all buttons and add to the clicked one.
                 filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 clickedButton.classList.add('active');
 
-                // Filter the cards using display:none for a perfect reflow
                 letterCards.forEach(card => {
-                    const categories = card.dataset.category;
-                    if (categories.includes(filter)) {
-                        card.style.display = 'flex'; // Show matching cards
-                    } else {
-                        card.style.display = 'none'; // Hide non-matching cards
-                    }
+                    card.style.display = card.dataset.category.includes(filter) ? 'flex' : 'none';
                 });
             });
+        });
+    </script>
+    
+    <!-- ADDED: Mini Player Script -->
+    <script id="mini-player-script">
+        document.addEventListener('DOMContentLoaded', () => {
+            const miniPlayer = {
+                playerElement: document.getElementById('mini-player'),
+                albumArt: document.getElementById('mini-player-art'),
+                title: document.getElementById('mini-player-title'),
+                artist: document.getElementById('mini-player-artist'),
+                playPauseBtn: document.getElementById('mini-player-play-pause'),
+                closeBtn: document.getElementById('mini-player-close'),
+                audio: new Audio(),
+                playlist: [],
+                currentSongIndex: 0,
+                
+                init() {
+                    const state = this.readState();
+                    if (state && state.isPlaying) {
+                        this.playlist = JSON.parse(localStorage.getItem('musicPlaylist')) || [];
+                        if (this.playlist.length === 0) return;
+                        this.currentSongIndex = state.currentSongIndex;
+                        this.loadSong(state.currentTime);
+                        this.show();
+                        this.addEventListeners();
+                    }
+                },
+                readState() { try { return JSON.parse(localStorage.getItem('musicPlayerState')); } catch (e) { return null; } },
+                saveState() {
+                    const state = { isPlaying: !this.audio.paused, currentSongIndex: this.currentSongIndex, currentTime: this.audio.currentTime };
+                    localStorage.setItem('musicPlayerState', JSON.stringify(state));
+                },
+                loadSong(startTime = 0) {
+                    const song = this.playlist[this.currentSongIndex];
+                    this.albumArt.src = song.albumArt;
+                    this.title.textContent = song.title;
+                    this.artist.textContent = song.artist;
+                    this.audio.src = song.src;
+                    this.audio.currentTime = startTime;
+                    this.audio.play();
+                    this.updatePlayPauseIcon();
+                },
+                playNext() {
+                    this.currentSongIndex = (this.currentSongIndex + 1) % this.playlist.length;
+                    this.loadSong();
+                },
+                togglePlayPause() { this.audio.paused ? this.audio.play() : this.audio.pause(); },
+                updatePlayPauseIcon() {
+                    this.playPauseBtn.querySelector('i').className = this.audio.paused ? 'ri-play-fill ri-lg' : 'ri-pause-fill ri-lg';
+                },
+                show() { this.playerElement.classList.add('visible'); },
+                hide() {
+                    this.audio.pause();
+                    this.playerElement.classList.remove('visible');
+                    const state = this.readState();
+                    if(state) {
+                        state.isPlaying = false;
+                        localStorage.setItem('musicPlayerState', JSON.stringify(state));
+                    }
+                },
+                addEventListeners() {
+                    this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+                    this.closeBtn.addEventListener('click', () => this.hide());
+                    this.audio.addEventListener('play', () => { this.updatePlayPauseIcon(); this.saveState(); });
+                    this.audio.addEventListener('pause', () => { this.updatePlayPauseIcon(); this.saveState(); });
+                    this.audio.addEventListener('ended', () => this.playNext());
+                    this.audio.addEventListener('timeupdate', () => {
+                        if (Math.abs(this.audio.currentTime - (this.readState()?.currentTime || 0)) > 1) this.saveState();
+                    });
+                }
+            };
+            miniPlayer.init();
         });
     </script>
 </body>
