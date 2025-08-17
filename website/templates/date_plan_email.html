@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Next Adventure!</title>
+    <!-- Link to your app's "ID card" -->
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<!-- Sets the browser top bar color on mobile -->
+<meta name="theme-color" content="#A7414A">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -70,5 +74,15 @@
             <p><small>This is an automated reminder from our personal website.</small></p>
         </div>
     </div>
+    <script>
+    // This script registers the service worker to enable offline functionality
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}")
+                .then(reg => console.log('Service worker registered successfully.'))
+                .catch(err => console.log('Service worker registration failed: ', err));
+        });
+    }
+</script>
 </body>
 </html>
