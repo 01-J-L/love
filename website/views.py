@@ -77,6 +77,13 @@ def our_memories():
         return redirect(url_for('views.lock'))
     return render_template("memories.html")
 
+# ADDED: New route for the interactive story page
+@views.route('/interactive-story')
+def interactive_story():
+    if not session.get('unlocked'):
+        return redirect(url_for('views.lock'))
+    return render_template("memories2.html")
+
 @views.route('/plan-a-date')
 def date_planner():
     if not session.get('unlocked'):
